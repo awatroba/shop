@@ -12,17 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Angelika
+ * Registration request controller
  */
 
 @RestController
 public class RegistrationController {
+
     private RegistrationService service;
 
     @Autowired
     public RegistrationController(RegistrationService service) {
         this.service = service;
     }
-
+    /**
+     * function to process the create user request
+     * @param createUserRequest create user request -requestBody
+     * @return ResponseEntity with message -
+     *      if user added - "success" and createUserRequest,
+     *      else "error" and error message
+     */
     @PostMapping("/registration")
     public ResponseEntity<Object> registration(@RequestBody CreateUserRequest createUserRequest) {
         String errorMessage = service.addNewUser(createUserRequest);
