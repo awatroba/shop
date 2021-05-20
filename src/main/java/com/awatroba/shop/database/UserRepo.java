@@ -1,6 +1,6 @@
-package com.awatroba.shop.registration.database;
+package com.awatroba.shop.database;
 
-import com.awatroba.shop.registration.models.User;
+import com.awatroba.shop.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

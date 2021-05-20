@@ -1,8 +1,8 @@
-package com.awatroba.shop.registration.services;
+package com.awatroba.shop.services;
 
-import com.awatroba.shop.registration.database.UserRepo;
+import com.awatroba.shop.database.UserRepo;
 import com.awatroba.shop.helpers.CreateUserRequest;
-import com.awatroba.shop.registration.models.User;
+import com.awatroba.shop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

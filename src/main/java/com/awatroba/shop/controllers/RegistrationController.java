@@ -1,8 +1,8 @@
-package com.awatroba.shop.registration.controllers;
+package com.awatroba.shop.controllers;
 
 import com.awatroba.shop.helpers.CreateUserRequest;
 import com.awatroba.shop.helpers.Response;
-import com.awatroba.shop.registration.services.RegistrationService;
+import com.awatroba.shop.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

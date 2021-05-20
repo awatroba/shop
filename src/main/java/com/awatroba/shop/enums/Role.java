@@ -1,4 +1,4 @@
-package com.awatroba.shop.registration.enums;
+package com.awatroba.shop.enums;
 /**
  *
  * @author Angelika

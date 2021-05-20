@@ -1,6 +1,6 @@
-package com.awatroba.shop.registration.models;
+package com.awatroba.shop.models;
 
-import com.awatroba.shop.registration.enums.Role;
+import com.awatroba.shop.enums.Role;
 
 import javax.persistence.*;
 
