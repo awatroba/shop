@@ -1,5 +1,8 @@
 package com.awatroba.shop.helpers;
-
+/**
+ * @author Angelika
+ * Model of response
+ */
 public class Response<T> {
 
     private String status;

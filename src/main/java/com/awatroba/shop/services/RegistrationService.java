@@ -34,14 +34,6 @@ public class RegistrationService {
     }
     /**
      * function searching for a user by login from the database
-     * @param login user login
-     * @return user
-     */
-    public User getUserByLogin(String login) {
-        return userRepo.findFirstByLogin(login);
-    }
-    /**
-     * function searching for a user by login from the database
      * @param request create user request
      * @return errorMessage or ""
      */

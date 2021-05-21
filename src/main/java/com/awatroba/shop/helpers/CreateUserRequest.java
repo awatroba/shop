@@ -1,7 +1,7 @@
 package com.awatroba.shop.helpers;
 /**
  * @author Angelika
- *
+ * Model of create user request
  */
 public class CreateUserRequest {
     private String login;
@@ -29,7 +29,7 @@ public class CreateUserRequest {
     public String toString() {
         return "CreateUserRequest{" +
                 "login='" + login + '\'' +
-                ", email='" + email + '\'' +
+                ",email='" + email + '\'' +
                 '}';
     }
 }
