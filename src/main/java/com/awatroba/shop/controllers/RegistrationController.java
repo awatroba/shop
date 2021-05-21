@@ -6,6 +6,7 @@ import com.awatroba.shop.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Registration request controller
  */
 
-@RestController
+@RestController()
 public class RegistrationController {
 
     private RegistrationService service;
@@ -44,4 +45,14 @@ public class RegistrationController {
            return new ResponseEntity<Object>(response, HttpStatus.INTERNAL_SERVER_ERROR);
        }
     }
+
+    //TODO: usuń funkcje!
+
+    @GetMapping("/registration")
+    public ResponseEntity<Object> registration() {
+        Response<String>  response =
+                new Response<String>("success", "welcome");
+        return new ResponseEntity<Object>(response, HttpStatus.OK);
+    }
+
 }
