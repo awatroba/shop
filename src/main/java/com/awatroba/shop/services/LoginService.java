@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author Angelika
  * custom database-backed UserDetailsService for authentication with Spring Security
@@ -32,10 +34,8 @@ public class LoginService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepo.findFirstByLogin(userName);
-        if (user == null) {
-            throw new UsernameNotFoundException("No such user in database");
-        }
+        User user = Optional.of(userRepo.findFirstByLogin(userName)).
+                orElseThrow(() -> new UsernameNotFoundException("No such user in database"));
         UserDetailsImp userDetailsImp = new UserDetailsImp(user);
         return userDetailsImp;
     }

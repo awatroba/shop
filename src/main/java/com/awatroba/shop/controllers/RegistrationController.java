@@ -25,32 +25,33 @@ public class RegistrationController {
     public RegistrationController(RegistrationService service) {
         this.service = service;
     }
+
     /**
      * function to process the create user request
+     *
      * @param createUserRequest create user request -requestBody
      * @return ResponseEntity with message -
-     *      if user added - "success" and createUserRequest,
-     *      else "error" and error message
+     * if user added - "success" and createUserRequest,
+     * else "error" and error message
      */
     @PostMapping("/registration")
     public ResponseEntity<Object> registration(@RequestBody CreateUserRequest createUserRequest) {
         String errorMessage = service.addNewUser(createUserRequest);
-       if(errorMessage.equals("")){
-           Response<CreateUserRequest>  response =
-                   new Response<CreateUserRequest>("success", createUserRequest);
-           return new ResponseEntity<Object>(response, HttpStatus.OK);
-       } else {
-           Response<String> response =
-                   new Response<String>("error", errorMessage);
-           return new ResponseEntity<Object>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+        if (errorMessage.equals("")) {
+            Response<CreateUserRequest> response =
+                    new Response<CreateUserRequest>("success", createUserRequest);
+            return new ResponseEntity<Object>(response, HttpStatus.OK);
+        } else {
+            Response<String> response =
+                    new Response<String>("error", errorMessage);
+            return new ResponseEntity<Object>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //TODO: usuń funkcje!
-
     @GetMapping("/registration")
     public ResponseEntity<Object> registration() {
-        Response<String>  response =
+        Response<String> response =
                 new Response<String>("success", "welcome");
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
