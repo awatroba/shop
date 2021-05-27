@@ -36,7 +36,7 @@ public class RegistrationController {
      * function to process the create user request
      *
      * @param createUserRequest create user request -requestBody
-     * @return ResponseEntity with message -
+     * @return ModelAndView with message -
      * if user added - "success" ,
      * else "error" and error message
      */
@@ -55,7 +55,11 @@ public class RegistrationController {
             return model;
         }
     }
-
+    /**
+     * function to process the create user request
+     *
+     * @return ModelAndView with message
+     */
     @GetMapping("/register")
     public ModelAndView getRegistrationPage() {
         return model;
