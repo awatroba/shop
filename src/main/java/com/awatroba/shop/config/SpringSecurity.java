@@ -49,11 +49,9 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/dashboard/**").hasAnyRole(new String[]{"ADMIN", "USER"})
                 .antMatchers(HttpMethod.POST, "/dashboard").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/dashboard/**").hasRole("ADMIN")
-                .and().formLogin().permitAll() // add loginPage
+                .and().formLogin().loginPage("/login").permitAll().failureUrl("/login?error") // add custom loginPage
                 .and().formLogin().defaultSuccessUrl("/dashboard")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/dashboard")
+                .and().logout().logoutSuccessUrl("/login")
                 .and()
                 .csrf().disable(); // for postman
     }
