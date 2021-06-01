@@ -7,5 +7,6 @@ package com.awatroba.shop.enums;
  */
 public enum CategoryProduct {
     CLOTHES,
+    OTHERS,
     ELECTORICS
     }

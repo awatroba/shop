@@ -21,7 +21,7 @@ public class Product {
     private String name;
 
     @Column(name = "product_price")
-    private float price;
+    private double price;
 
     @Column(name = "product_description")
     private String description;
@@ -32,10 +32,30 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, float price, String description, CategoryProduct category) {
+    public Product(String name, double price,  String description, CategoryProduct category) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.category = category;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CategoryProduct getCategory() {
+        return category;
     }
 }

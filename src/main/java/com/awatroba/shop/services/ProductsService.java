@@ -7,6 +7,7 @@ import com.awatroba.shop.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 /**
  * @author Angelika
@@ -14,10 +15,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProductsService {
+    private static String ADDING_ERROR = "Adding error - please complete all fields!";
+    private static String ADDING_ERROR_PRICE = "Adding error -price must be greater than 0!";
     private ProductRepo productRepo;
 
     @Autowired
     public ProductsService(ProductRepo productRepo) {
+
         this.productRepo = productRepo;
     }
 
@@ -47,7 +51,8 @@ public class ProductsService {
      * @return product by id or throw exception
      */
     public Product getProductById(Long productId) {
-        return productRepo.findById(productId).orElseThrow(() -> new ProductNotFoundException());
+        return productRepo.findById(productId).orElseThrow(
+                () -> new ProductNotFoundException());
     }
 
     /**
@@ -60,7 +65,9 @@ public class ProductsService {
         String errorMessage = checkProductData(request);
         if (!errorMessage.equals(""))
             return errorMessage;
-        productRepo.save(new Product(request.getName(), request.getPrice(), request.getDescription(), request.getCategory()));
+        productRepo.save(new Product(request.getName(),
+                round(request.getPrice(), 2), request.getDescription(),
+                request.getCategory()));
         return "";
     }
 
@@ -70,8 +77,13 @@ public class ProductsService {
      * @param request create product request
      * @return errorMessage or ""
      */
-    //TODO: mate this function
+
     private String checkProductData(CreateProductRequest request) {
+        if (request.getDescription().isEmpty() ||
+                request.getName().isEmpty())
+            return ADDING_ERROR;
+        if (request.getPrice() <= 0)
+            return ADDING_ERROR_PRICE;
         return "";
     }
 
@@ -82,8 +94,26 @@ public class ProductsService {
      * @return deleted product
      */
     public Product deleteProduct(Long productId) {
-        Product prodToDelete = getProductById(productId);
+        Product prodToDelete =
+                Optional.of(getProductById(productId)).orElseThrow(
+                        () -> new ProductNotFoundException());
         productRepo.deleteById(productId);
         return prodToDelete;
+    }
+
+    /**
+     * helpers function
+     *
+     * @param value  -value to round
+     * @param places -decimal places
+     * @return rounded number
+     */
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }
