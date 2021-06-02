@@ -1,11 +1,10 @@
 package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.CartRepo;
-import com.awatroba.shop.database.ProductRepo;
-import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
 import com.awatroba.shop.models.Product;
 import com.awatroba.shop.models.ShoppingCart;
+import com.awatroba.shop.models.User;
 import com.awatroba.shop.models.UserDetailsImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,12 +19,15 @@ import java.util.Set;
 @Service
 public class CartService {
     private CartRepo cartRepo;
-    private ProductRepo productRepo;
+    private ProductsService productsService;
+    private RegistrationService registrationService;
 
     @Autowired
-    public CartService(CartRepo cartRepo,ProductRepo productRepo) {
+    public CartService(CartRepo cartRepo,ProductsService productsService,
+                       RegistrationService registrationService) {
         this.cartRepo = cartRepo;
-        this.productRepo = productRepo;
+        this.productsService = productsService;
+        this.registrationService = registrationService;
     }
 
     public ShoppingCart getUsersShoppingCart(Authentication authentication){
@@ -43,9 +45,23 @@ public class CartService {
     }
 
     public void addProductToCart(Authentication authentication, Long id) {
-        Product product = productRepo.findById(id).orElseThrow(()-> new ProductNotFoundException());
+        Product product = productsService.getProductById(id);
         ShoppingCart cart=getUsersShoppingCart(authentication);
         cart.addProduct(product);
+        cartRepo.save(cart);
+    }
+    public void addShoppingCartToUser(Authentication authentication) {
+        User user= registrationService.getUserById(getUserId(authentication));
+        ShoppingCart cart = new ShoppingCart();
+
+        user.setShoppingCart(cart);
+        cart.setUser(user);
+
+        cartRepo.save(cart);
+        registrationService.saveUser(user);
+    }
+
+    public void save(ShoppingCart cart) {
         cartRepo.save(cart);
     }
 }

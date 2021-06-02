@@ -2,6 +2,7 @@ package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.UserRepo;
 import com.awatroba.shop.helpers.CreateUserRequest;
+import com.awatroba.shop.models.ShoppingCart;
 import com.awatroba.shop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,12 @@ public class RegistrationService {
     private final static String LOGIN_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$";
 
     private UserRepo userRepo;
+    private CartService cartService;
 
     @Autowired
-    public RegistrationService(UserRepo userRepo) {
+    public RegistrationService(UserRepo userRepo,CartService cartService) {
         this.userRepo = userRepo;
-    }
+        this.cartService = cartService; }
 
     /**
      * function searching for a user by login from the database and checking user data
@@ -43,7 +45,14 @@ public class RegistrationService {
         String errorMessage = checkUserData(request);
         if (!errorMessage.equals(""))
             return errorMessage;
-        userRepo.save(new User(request.getLogin(), request.getEmail(), request.getPassword()));
+        User user =new User(request.getLogin(), request.getEmail(), request.getPassword());
+
+        ShoppingCart cart = new ShoppingCart();
+        user.setShoppingCart(cart);
+        cart.setUser(user);
+
+        userRepo.save(user);
+        cartService.save(cart);
         return "";
     }
 
@@ -116,5 +125,12 @@ public class RegistrationService {
      */
     private boolean isLoginAvailable(final String login) {
         return userRepo.findFirstByLogin(login) == null ? true : false;
+    }
+    User getUserById(Long id){
+        return userRepo.findFirstById(id);
+    }
+
+    public void saveUser(User user) {
+        userRepo.save(user);
     }
 }

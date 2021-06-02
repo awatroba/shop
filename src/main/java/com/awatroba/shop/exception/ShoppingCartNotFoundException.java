@@ -6,7 +6,7 @@ package com.awatroba.shop.exception;
  */
 public class ShoppingCartNotFoundException extends RuntimeException {
     public ShoppingCartNotFoundException() {
-        super("Shopping cart not found exception ");
+        super("Shopping cart not found, try again");
     }
 }
 

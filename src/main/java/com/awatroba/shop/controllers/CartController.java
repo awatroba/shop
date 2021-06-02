@@ -53,6 +53,7 @@ public class CartController {
                     cartService.getUsersProductInShoppingCart(authentication));
         }catch (ShoppingCartNotFoundException e){
             model.addObject(MESSAGE_ERROR, e.getMessage());
+            cartService.addShoppingCartToUser(authentication);
         }
         return model;
     }
