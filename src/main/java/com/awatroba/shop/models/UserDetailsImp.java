@@ -33,6 +33,9 @@ public class UserDetailsImp implements UserDetails {
     public String getUsername() {
         return this.user.getLogin();
     }
+    public Long getUserId() {
+        return this.user.getId();
+    }
 
     @Override
     public boolean isAccountNonExpired() {

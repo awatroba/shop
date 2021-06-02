@@ -8,7 +8,7 @@ import java.util.Set;
  * Object that stores shopping cart.
  */
 @Entity
-@Table(name="Cart")
+@Table(name = "Cart")
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +16,7 @@ public class ShoppingCart {
     private Long id;
 
     //One cart can have many items, so here we have a one-to-many mapping.
-    @OneToMany(mappedBy="cart")
+    @OneToMany(mappedBy = "cart")
     private Set<Product> products;
 
     //One cart can have one user, so here we have a one-to-one mapping.
@@ -37,6 +37,10 @@ public class ShoppingCart {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public void addProduct(Product products) {
+        this.products.add(products);
     }
 
     public Long getId() {
