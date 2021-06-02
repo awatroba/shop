@@ -7,18 +7,25 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- *  @author Angelika
- *  Repository for PRODUCT objects. Interface to manipulate Product data, write and read data
+ * @author Angelika
+ * Repository for PRODUCT objects. Interface to manipulate Product data, write and read data
  **/
 @Repository
-public interface ProductRepo extends CrudRepository<Product,Long> {
+public interface ProductRepo extends CrudRepository<Product, Long> {
     @Override
     Iterable<Product> findAll();
+
     @Override
     Optional<Product> findById(Long aLong);
-    Iterable<Product>  findAllByCategory(String category);
+
     @Override
     void deleteById(Long aLong);
+
     @Override
     void delete(Product product);
+
+    Iterable<Product> findAllByEnable(boolean enable);
+
+    Iterable<Product> findAllByCategoryAndEnable(String category, boolean enable);
+
 }

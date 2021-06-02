@@ -31,7 +31,7 @@ public class ProductsService {
      * @return all products
      */
     public Iterable<Product> getAllProducts() {
-        return productRepo.findAll();
+        return productRepo.findAllByEnable(true);
     }
 
     /**
@@ -41,7 +41,7 @@ public class ProductsService {
      * @return all products by category
      */
     public Iterable<Product> getAllProductsByCategory(String category) {
-        return productRepo.findAllByCategory(category);
+        return productRepo.findAllByCategoryAndEnable(category,true);
     }
 
     /**
