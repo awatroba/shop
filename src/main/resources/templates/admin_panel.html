@@ -9,11 +9,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
-    <script type="text/javascript" th:src="@{/js/file.js}"></script>
+
     <link rel="shortcut icon" href="https://icons8.com/icon/44640/edit"/>
     <link rel="shortcut icon" href="https://icons8.com/icon/45/delete"/>
+    <link rel="shortcut icon" href="https://icons8.com/icon//84926/shopping-cart"/>
+
     <title>Dashboard</title>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -80,7 +84,7 @@
                     <select class="form-select" th:field="*{category}">
                         <option th:each="category : ${T(com.awatroba.shop.enums.CategoryProduct).values()}"
                                 th:value="${category}"
-                                th:text="${category}">
+                                th:text="${category.getDisplayName()}">
                         </option>
                     </select>
                 </div>
@@ -106,19 +110,17 @@
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Category</th>
                     <th scope="col">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                 <tr th:each="product : ${products}">
-                    <th scope="row" th:text="${product.getId()}"></th>
-                    <td th:text="${product.getName()}"></td>
-                    <td th:text="${product.getDescription()}"></td>
-                    <td th:text="${product.getPrice()}"></td>
-                    <td th:text="${product.getCategory()}"></td>
-                    <td>
+                    <td class="col-md-1" th:text="${product.getId()}"></td>
+                    <td class="col-md-3" th:text="${product.getName()}"></td>
+                    <td class="col-md-6" th:text="${product.getDescription()}"></td>
+                    <td class="col-md-1" th:text="${product.getPrice()}"></td>
+                    <td class="col-md-1">
                         <form action="#" th:action="@{'/admin/{id}'(id=${product.getId()})}" th:method="delete">
                             <input type="hidden" name="_method" value="delete"/>
                             <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">

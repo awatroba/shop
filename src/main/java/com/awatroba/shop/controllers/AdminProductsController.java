@@ -23,7 +23,6 @@ public class AdminProductsController {
     private static String MESSAGE_ERROR = "messageError";
     private static String MESSAGE_SUCCESS = "messageSuccess";
     private static String PRODUCTS_PARAM = "products";
-    private static String PRODUCT_PARAM = "product";
     private static String DELL_MESS = "Product has been removed";
     private static String ADD_MESS = "Product has been added";
     private static String MODEL_NAME = "admin_panel";
@@ -40,7 +39,6 @@ public class AdminProductsController {
 
     @GetMapping("/admin")
     public ModelAndView getDashboard() {
-        List<Product> list = (List<Product>) productsService.getAllProducts();
         model.addObject(PRODUCTS_PARAM, (List<Product>) productsService.getAllProducts());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
