@@ -47,13 +47,21 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/dashboard").hasAnyRole(new String[]{"ADMIN", "USER"})
                 .antMatchers(HttpMethod.GET, "/dashboard/**").hasAnyRole(new String[]{"ADMIN", "USER"})
-                .antMatchers(HttpMethod.POST, "/dashboard").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/dashboard/**").hasRole("ADMIN")
-                .and().formLogin().loginPage("/login").permitAll().failureUrl("/login?error") // add custom loginPage
+
+                .antMatchers( "/cart").hasAnyRole(new String[]{"ADMIN", "USER"})
+
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+
+                .and().formLogin().loginPage("/login").permitAll().failureUrl("/login?error")
                 .and().formLogin().defaultSuccessUrl("/dashboard")
+
                 .and().logout().logoutSuccessUrl("/login")
-                .and()
-                .csrf().disable(); // for postman
+
+                .and().csrf().disable()/*for h2 console*/
+                .headers().frameOptions().disable()
+
+                .and().httpBasic() .and().cors().disable();
     }
 
     /**
