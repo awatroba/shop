@@ -50,16 +50,6 @@ public class CartService {
         cart.addProduct(product);
         cartRepo.save(cart);
     }
-    public void addShoppingCartToUser(Authentication authentication) {
-        User user= registrationService.getUserById(getUserId(authentication));
-        ShoppingCart cart = new ShoppingCart();
-
-        user.setShoppingCart(cart);
-        cart.setUser(user);
-
-        cartRepo.save(cart);
-        registrationService.saveUser(user);
-    }
 
     public void save(ShoppingCart cart) {
         cartRepo.save(cart);
