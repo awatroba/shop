@@ -32,4 +32,30 @@ public class CreateUserRequest {
                 ",email='" + email + '\'' +
                 '}';
     }
+
+    public CreateUserRequest(String login, String email,String password, String confirmPassword) {
+        this.login = login;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.email = email;
+    }
+
+    public CreateUserRequest() {
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

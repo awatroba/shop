@@ -2,6 +2,7 @@ package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.UserRepo;
 import com.awatroba.shop.helpers.CreateUserRequest;
+import com.awatroba.shop.models.ShoppingCart;
 import com.awatroba.shop.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,21 +33,25 @@ public class RegistrationService {
     public RegistrationService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
+
     /**
-     * function searching for a user by login from the database
+     * function searching for a user by login from the database and checking user data
+     *
      * @param request create user request
      * @return errorMessage or ""
      */
-    public String addNewUser(CreateUserRequest request){
-        String errorMessage=checkUserData(request);
+    public String addNewUser(CreateUserRequest request) {
+        String errorMessage = checkUserData(request);
         if (!errorMessage.equals(""))
             return errorMessage;
-
-        userRepo.save(new User(request.getLogin(),request.getEmail(),request.getPassword()));
+        User user =new User(request.getLogin(), request.getEmail(), request.getPassword(),new ShoppingCart());
+        userRepo.save(user);
         return "";
     }
+
     /**
      * function for data validation
+     *
      * @param request create user request
      * @return errorMessage or ""
      */
@@ -55,7 +60,7 @@ public class RegistrationService {
             return LOGIN_INC_REG_ERROR;
         }
         if (!isLoginAvailable(request.getLogin())) {
-            return  LOGIN_UNAVAILABLE_ERROR;
+            return LOGIN_UNAVAILABLE_ERROR;
         }
         if (request.getEmail().isEmpty() || !isValidEmail(request.getEmail())) {
             return EMAIL_ERROR;
@@ -68,8 +73,10 @@ public class RegistrationService {
         }
         return "";
     }
+
     /**
      * function for password validation
+     *
      * @param password password from create user request
      * @return true if  valid  else false
      */
@@ -78,8 +85,10 @@ public class RegistrationService {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
+
     /**
      * function for email validation
+     *
      * @param email email from create user request
      * @return true if  valid  else false
      */
@@ -88,8 +97,10 @@ public class RegistrationService {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
     /**
      * function for login validation
+     *
      * @param login login from create user request
      * @return true if  valid  else false
      */
@@ -98,12 +109,21 @@ public class RegistrationService {
         Matcher matcher = pattern.matcher(login);
         return matcher.matches();
     }
+
     /**
      * function for checking the availability of the login
+     *
      * @param login login from create user request
      * @return true if  valid  else false
      */
     private boolean isLoginAvailable(final String login) {
-        return userRepo.findFirstByLogin(login)==null ?  true:  false;
+        return userRepo.findFirstByLogin(login) == null ? true : false;
+    }
+    User getUserById(Long id){
+        return userRepo.findFirstById(id);
+    }
+
+    public void saveUser(User user) {
+        userRepo.save(user);
     }
 }
