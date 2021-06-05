@@ -19,15 +19,9 @@ import java.util.Set;
 @Service
 public class CartService {
     private CartRepo cartRepo;
-    private ProductsService productsService;
-    private RegistrationService registrationService;
-
     @Autowired
-    public CartService(CartRepo cartRepo,ProductsService productsService,
-                       RegistrationService registrationService) {
+    public CartService(CartRepo cartRepo){
         this.cartRepo = cartRepo;
-        this.productsService = productsService;
-        this.registrationService = registrationService;
     }
 
     public ShoppingCart getUsersShoppingCart(Authentication authentication){
@@ -35,20 +29,17 @@ public class CartService {
         return cartRepo.findById(userId).orElseThrow(()->new ShoppingCartNotFoundException());
     }
 
-    public Set<Product> getUsersProductInShoppingCart(Authentication authentication){
+    /*public Set<Product> getUsersProductInShoppingCart(Authentication authentication){
         ShoppingCart cart = getUsersShoppingCart(authentication);
         return cart.getProducts();
-    }
+    }*/
 
     private Long getUserId(Authentication authentication) {
         return  ((UserDetailsImp)authentication.getPrincipal()).getUserId();
     }
 
     public void addProductToCart(Authentication authentication, Long id) {
-        Product product = productsService.getProductById(id);
-        ShoppingCart cart=getUsersShoppingCart(authentication);
-        cart.addProduct(product);
-        cartRepo.save(cart);
+
     }
 
     public void save(ShoppingCart cart) {

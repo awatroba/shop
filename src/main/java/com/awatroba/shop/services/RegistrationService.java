@@ -28,12 +28,11 @@ public class RegistrationService {
     private final static String LOGIN_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{4,}$";
 
     private UserRepo userRepo;
-    private CartService cartService;
 
     @Autowired
-    public RegistrationService(UserRepo userRepo,CartService cartService) {
+    public RegistrationService(UserRepo userRepo) {
         this.userRepo = userRepo;
-        this.cartService = cartService; }
+    }
 
     /**
      * function searching for a user by login from the database and checking user data
@@ -45,14 +44,8 @@ public class RegistrationService {
         String errorMessage = checkUserData(request);
         if (!errorMessage.equals(""))
             return errorMessage;
-        User user =new User(request.getLogin(), request.getEmail(), request.getPassword());
-
-        ShoppingCart cart = new ShoppingCart();
-        user.setShoppingCart(cart);
-        cart.setUser(user);
-
+        User user =new User(request.getLogin(), request.getEmail(), request.getPassword(),new ShoppingCart());
         userRepo.save(user);
-        cartService.save(cart);
         return "";
     }
 

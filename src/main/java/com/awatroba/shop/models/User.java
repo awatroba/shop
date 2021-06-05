@@ -30,17 +30,26 @@ public class User {
     private Role role;
 
     //One user can have one cart, so here we have a one-to-one mapping.
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_cart", referencedColumnName = "cart_id", nullable = false)
     private ShoppingCart shoppingCart;
 
-    public User(String login, String email, String pass, Role role) {
+
+    public User(String login, String email, String pass, Role role,ShoppingCart shoppingCart) {
         this.login = login;
         this.email = email;
         this.pass = pass;
         this.role = role;
+        this.shoppingCart = shoppingCart;
     }
 
+    public User(String login,String email, String pass,ShoppingCart shoppingCart) {
+        this.login = login;
+        this.email = email;
+        this.pass = pass;
+        this.role=Role.USER;
+        this.shoppingCart = shoppingCart;
+    }
     public User(String login,String email, String pass) {
         this.login = login;
         this.email = email;
@@ -49,6 +58,7 @@ public class User {
     }
 
     public User() { }
+
 
     public Long getId() {
         return id;
@@ -66,6 +76,14 @@ public class User {
         this.login = login;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPass() {
         return pass;
     }
@@ -80,14 +98,6 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public ShoppingCart getShoppingCart() {
