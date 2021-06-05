@@ -24,8 +24,6 @@ public class CartService {
     private UserRepo userRepo;
     private ProductRepo productRepo;
 
-    private ShoppingCart shoppingCart;
-
     @Autowired
     public CartService(CartRepo cartRepo, UserRepo userRepo,ProductRepo productRepo) {
         this.cartRepo = cartRepo;
@@ -39,6 +37,7 @@ public class CartService {
                 userRepo.findFirstById(userId).getShoppingCart())
                 .orElseThrow(() -> new ShoppingCartNotFoundException());
     }
+
     public Product getProductById(Long id) {
         return productRepo.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException());
@@ -58,5 +57,26 @@ public class CartService {
 
         shoppingCart.addProduct(product);
         cartRepo.save(shoppingCart);
+    }
+    /**
+     * function adding product from Cart
+     *
+     * @param productId
+     * @return deleted product
+     */
+    public Product deleteProduct(Authentication authentication,Long productId) {
+        Product prodToDelete =
+                Optional.of(getProductById(productId)).orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        prodToDelete.setEnable(true);
+        prodToDelete.setCart(null);
+        productRepo.save(prodToDelete);
+
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
+        shoppingCart.deleteProduct(prodToDelete);
+        cartRepo.save(shoppingCart);
+
+        return prodToDelete;
     }
 }

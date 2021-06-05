@@ -45,6 +45,7 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
+            <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -54,6 +55,15 @@
             <td class="col-md-3" th:text="${product.getName()}"></td>
             <td class="col-md-6" th:text="${product.getDescription()}"></td>
             <td class="col-md-1" th:text="${product.getPrice()}"></td>
+            <td class="col-md-1">
+                <form action="#" th:action="@{'/cart/{id}'(id=${product.getId()})}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">
+                        <img src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
+                    </button>
+                </form>
+
+            </td>
         </tr>
         </tr>
         </tbody>
