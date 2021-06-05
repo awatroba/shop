@@ -89,8 +89,7 @@
                         <td class="col-md-1" th:text="${product.getPrice()}"></td>
                         <td class="col-md-1">
                             <form action="#" th:action="@{'/dashboard/{id}'(id=${product.getId()})}" th:method="get">
-                                <input type="hidden" name="_method" value="get"/>
-                                <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">
+                                <button type="submit" class="btn btn-outline-danger" id="showDetailsSubmitButton">
                                     <img src="https://img.icons8.com/metro/26/000000/search.png"/>
                                 </button>
                             </form>

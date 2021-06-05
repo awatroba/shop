@@ -17,6 +17,59 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="myNavbars">
+            <ul class="navbar-nav me-auto mb-2">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/dashboard" aria-disabled="false">Home</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <input class="form-control" type="text" placeholder="Product Name" aria-label="Search">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
+            <form class="d-flex" action="#" th:action="@{'/cart'}" th:method="GET">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <img src="https://img.icons8.com/material/24/ffffff/shopping-cart--v1.png"/>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <table class="table table-sm table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col">Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <tr th:each="product : ${products}">
+            <td class="col-md-1" th:text="${product.getId()}"></td>
+            <td class="col-md-3" th:text="${product.getName()}"></td>
+            <td class="col-md-6" th:text="${product.getDescription()}"></td>
+            <td class="col-md-1" th:text="${product.getPrice()}"></td>
+            <td class="col-md-1">
+                <form action="#" th:action="@{'/cart/{id}'(id=${product.getId()})}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">
+                        <img src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+        </tr>
+        </tbody>
+    </table>
+    <hr/>
+</div>
 
 <!-- Optional JavaScript; choose one of the two! -->
 

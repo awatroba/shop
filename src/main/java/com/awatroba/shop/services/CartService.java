@@ -1,16 +1,18 @@
 package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.CartRepo;
+import com.awatroba.shop.database.ProductRepo;
+import com.awatroba.shop.database.UserRepo;
+import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
 import com.awatroba.shop.models.Product;
 import com.awatroba.shop.models.ShoppingCart;
-import com.awatroba.shop.models.User;
 import com.awatroba.shop.models.UserDetailsImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.Optional;
 
 /**
  * @author Angelika
@@ -19,30 +21,88 @@ import java.util.Set;
 @Service
 public class CartService {
     private CartRepo cartRepo;
+    private UserRepo userRepo;
+    private ProductRepo productRepo;
+
     @Autowired
-    public CartService(CartRepo cartRepo){
+    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo) {
         this.cartRepo = cartRepo;
+        this.userRepo = userRepo;
+        this.productRepo = productRepo;
     }
 
-    public ShoppingCart getUsersShoppingCart(Authentication authentication){
-        Long userId=getUserId(authentication);
-        return cartRepo.findById(userId).orElseThrow(()->new ShoppingCartNotFoundException());
+    /**
+     * function getting product by id
+     *
+     * @param authentication authentication for getting ser id
+     * @return ShoppingCart for logged user
+     */
+    public ShoppingCart getUsersShoppingCart(Authentication authentication) {
+        Long userId = getUserId(authentication);
+        return Optional.of(
+                userRepo.findFirstById(userId).getShoppingCart())
+                .orElseThrow(() -> new ShoppingCartNotFoundException());
     }
 
-    /*public Set<Product> getUsersProductInShoppingCart(Authentication authentication){
-        ShoppingCart cart = getUsersShoppingCart(authentication);
-        return cart.getProducts();
-    }*/
+    /**
+     * function getting product by id
+     *
+     * @param id product id
+     * @return product
+     */
+    public Product getProductById(Long id) {
+        return productRepo.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException());
+    }
 
+    /**
+     * function delete product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @return logged user id
+     */
     private Long getUserId(Authentication authentication) {
-        return  ((UserDetailsImp)authentication.getPrincipal()).getUserId();
+        return ((UserDetailsImp) authentication.getPrincipal()).getUserId();
     }
 
-    public void addProductToCart(Authentication authentication, Long id) {
+    /**
+     * function to adding product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @param productId
+     */
+    public void addProductToCart(Authentication authentication, Long productId) {
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
 
+        Product product = getProductById(productId);
+        product.setCart(shoppingCart);
+        product.setEnable(false);
+        productRepo.save(product);
+
+        shoppingCart.addProduct(product);
+        cartRepo.save(shoppingCart);
     }
 
-    public void save(ShoppingCart cart) {
-        cartRepo.save(cart);
+    /**
+     * function delete product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @param productId
+     * @return deleted product
+     */
+    public Product deleteProduct(Authentication authentication, Long productId) {
+        Product prodToDelete =
+                Optional.of(getProductById(productId)).orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        prodToDelete.setEnable(true);
+        prodToDelete.setCart(null);
+        productRepo.save(prodToDelete);
+
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
+        shoppingCart.deleteProduct(prodToDelete);
+        cartRepo.save(shoppingCart);
+
+        return prodToDelete;
     }
 }

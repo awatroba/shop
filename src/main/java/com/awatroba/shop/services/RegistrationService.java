@@ -44,7 +44,7 @@ public class RegistrationService {
         String errorMessage = checkUserData(request);
         if (!errorMessage.equals(""))
             return errorMessage;
-        User user =new User(request.getLogin(), request.getEmail(), request.getPassword(),new ShoppingCart());
+        User user = new User(request.getLogin(), request.getEmail(), request.getPassword(), new ShoppingCart());
         userRepo.save(user);
         return "";
     }
@@ -119,10 +119,22 @@ public class RegistrationService {
     private boolean isLoginAvailable(final String login) {
         return userRepo.findFirstByLogin(login) == null ? true : false;
     }
-    User getUserById(Long id){
+
+    /**
+     * function for getting user by id
+     *
+     * @param id user id
+     * @return user
+     */
+    User getUserById(Long id) {
         return userRepo.findFirstById(id);
     }
 
+    /**
+     * function for saving user
+     *
+     * @param user user to save
+     */
     public void saveUser(User user) {
         userRepo.save(user);
     }
