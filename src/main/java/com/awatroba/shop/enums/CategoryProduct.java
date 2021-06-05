@@ -1,5 +1,7 @@
 package com.awatroba.shop.enums;
 
+import java.util.stream.Stream;
+
 /**
  *
  * @author Angelika
@@ -8,7 +10,7 @@ package com.awatroba.shop.enums;
 public enum CategoryProduct {
     CLOTHES("Clothes"),
     OTHERS("Others"),
-    ELECTORICS("Electrics"),
+    ELECTRICS("Electrics"),
     ACCESSORIES("Accessories"),
     BAGS("Bags"),
     SHOES("Shoes"),
@@ -26,5 +28,8 @@ public enum CategoryProduct {
 
     public String getDisplayName() {
         return displayName;
+    }
+    public static Stream<CategoryProduct> stream() {
+        return Stream.of(CategoryProduct.values());
     }
 }

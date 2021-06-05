@@ -50,6 +50,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
                 .antMatchers( "/cart").hasAnyRole(new String[]{ "USER"})
 
+                .antMatchers( "/category/**").hasAnyRole(new String[]{"ADMIN", "USER"})
+
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
 

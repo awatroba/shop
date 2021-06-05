@@ -1,5 +1,6 @@
 package com.awatroba.shop.controllers;
 
+import com.awatroba.shop.enums.CategoryProduct;
 import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.helpers.CreateUserRequest;
 import com.awatroba.shop.models.Product;
@@ -62,4 +63,18 @@ public class ProductsController {
         }
         return model;
     }
+    /**
+     * function get product details by id
+     * @param category             product category
+     * @return ModelAndView with message and attribute
+     */
+    @GetMapping("/category/{category}")
+    public ModelAndView getProductByCategory(@PathVariable("category") String category) {
+        model.setViewName(DASHBOARD_MODEL_NAME);
+        model.addObject(PRODUCTS_PARAM, productsService.getAllProductsByCategory(category));
+        model.addObject(MESSAGE_ERROR, "");
+        model.addObject(MESSAGE_SUCCESS, "");
+        return model;
+    }
+
 }

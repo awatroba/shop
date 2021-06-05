@@ -1,6 +1,8 @@
 package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.ProductRepo;
+import com.awatroba.shop.enums.CategoryProduct;
+import com.awatroba.shop.exception.CategoryNotFoundException;
 import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.helpers.CreateProductRequest;
 import com.awatroba.shop.models.Product;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * @author Angelika
@@ -41,7 +44,12 @@ public class ProductsService {
      * @return all products by category
      */
     public Iterable<Product> getAllProductsByCategory(String category) {
-        return productRepo.findAllByCategoryAndEnable(category,true);
+        CategoryProduct categoryProduct =
+                CategoryProduct.stream().filter(c ->
+                        c.getDisplayName().equals(category)).findFirst().
+                        orElseThrow(() -> new CategoryNotFoundException());
+        
+        return productRepo.findAllByCategoryAndEnable(categoryProduct, true);
     }
 
     /**
