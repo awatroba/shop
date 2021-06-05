@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -35,23 +33,15 @@ public class CartController {
         getBasicViewModel(authentication);
         return model;
     }
-    @PostMapping("/cart/{id}")
-    public ModelAndView addProductToCard(
-            @PathVariable("id") Long id, Authentication authentication) {
-        cartService.addProductToCart(authentication,id);
-        getBasicViewModel(authentication);
-        return model;
-    }
+
 
     public ModelAndView getBasicViewModel(Authentication authentication) {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
-        try{
+        try {
             model.addObject(SHOPPING_CART_PARAM,
                     cartService.getUsersShoppingCart(authentication));
-            //model.addObject(PRODUCTS_PARAM,
-                   // cartService.getUsersProductInShoppingCart(authentication));
-        }catch (ShoppingCartNotFoundException e){
+        } catch (ShoppingCartNotFoundException e) {
             model.addObject(MESSAGE_ERROR, e.getMessage());
         }
         return model;
