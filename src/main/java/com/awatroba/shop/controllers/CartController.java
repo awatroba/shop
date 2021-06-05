@@ -18,13 +18,11 @@ public class CartController {
     private static String MESSAGE_ERROR = "messageError";
     private static String MESSAGE_SUCCESS = "messageSuccess";
     private static String PRODUCTS_PARAM = "products";
-    private static String SHOPPING_CART_PARAM = "shoppingCart";
     private static String MODEL_NAME = "cart";
 
     @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
-
         model = new ModelAndView(MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
@@ -46,12 +44,10 @@ public class CartController {
     public ModelAndView getBasicViewModel(Authentication authentication) {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
-        try{
-            model.addObject(SHOPPING_CART_PARAM,
-                    cartService.getUsersShoppingCart(authentication));
-            //model.addObject(PRODUCTS_PARAM,
-                   // cartService.getUsersProductInShoppingCart(authentication));
-        }catch (ShoppingCartNotFoundException e){
+        try {
+            model.addObject(PRODUCTS_PARAM,
+                    cartService.getUsersShoppingCart(authentication).getProducts());
+        } catch (ShoppingCartNotFoundException e) {
             model.addObject(MESSAGE_ERROR, e.getMessage());
         }
         return model;

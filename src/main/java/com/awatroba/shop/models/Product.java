@@ -33,7 +33,7 @@ public class Product {
     private CategoryProduct category;
 
     //One cart can have many items, so here we have a one-to-many mapping.
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="cart_id")
     private ShoppingCart cart;
 
