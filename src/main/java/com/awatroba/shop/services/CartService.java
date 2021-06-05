@@ -24,30 +24,53 @@ public class CartService {
     private UserRepo userRepo;
     private ProductRepo productRepo;
 
-    private ShoppingCart shoppingCart;
-
     @Autowired
-    public CartService(CartRepo cartRepo, UserRepo userRepo,ProductRepo productRepo) {
+    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo) {
         this.cartRepo = cartRepo;
         this.userRepo = userRepo;
         this.productRepo = productRepo;
     }
 
+    /**
+     * function getting product by id
+     *
+     * @param authentication authentication for getting ser id
+     * @return ShoppingCart for logged user
+     */
     public ShoppingCart getUsersShoppingCart(Authentication authentication) {
         Long userId = getUserId(authentication);
         return Optional.of(
                 userRepo.findFirstById(userId).getShoppingCart())
                 .orElseThrow(() -> new ShoppingCartNotFoundException());
     }
+
+    /**
+     * function getting product by id
+     *
+     * @param id product id
+     * @return product
+     */
     public Product getProductById(Long id) {
         return productRepo.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException());
     }
 
+    /**
+     * function delete product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @return logged user id
+     */
     private Long getUserId(Authentication authentication) {
         return ((UserDetailsImp) authentication.getPrincipal()).getUserId();
     }
 
+    /**
+     * function to adding product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @param productId
+     */
     public void addProductToCart(Authentication authentication, Long productId) {
         ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
 
@@ -58,5 +81,28 @@ public class CartService {
 
         shoppingCart.addProduct(product);
         cartRepo.save(shoppingCart);
+    }
+
+    /**
+     * function delete product from Cart
+     *
+     * @param authentication authentication for getting ser id
+     * @param productId
+     * @return deleted product
+     */
+    public Product deleteProduct(Authentication authentication, Long productId) {
+        Product prodToDelete =
+                Optional.of(getProductById(productId)).orElseThrow(
+                        () -> new ProductNotFoundException());
+
+        prodToDelete.setEnable(true);
+        prodToDelete.setCart(null);
+        productRepo.save(prodToDelete);
+
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
+        shoppingCart.deleteProduct(prodToDelete);
+        cartRepo.save(shoppingCart);
+
+        return prodToDelete;
     }
 }

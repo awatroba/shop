@@ -31,6 +31,11 @@ public class ProductsController {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
     }
+    /**
+     * function get dashboard for user
+     *
+     * @return ModelAndView with message and attribute
+     */
     @GetMapping("/dashboard")
     public ModelAndView getDashboard() {
         model.setViewName(DASHBOARD_MODEL_NAME);
@@ -39,7 +44,11 @@ public class ProductsController {
         model.addObject(MESSAGE_SUCCESS, "");
         return model;
     }
-
+    /**
+     * function get product details by id
+     * @param id             product id
+     * @return ModelAndView with message and attribute
+     */
     @GetMapping("/dashboard/{id}")
     public ModelAndView getProductById(@PathVariable("id") Long id) {
         model.setViewName(PROD_DET_MODEL_NAME);
