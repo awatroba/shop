@@ -16,12 +16,13 @@ public class ShoppingCart {
     private Long id;
 
     //One cart can have many items, so here we have a one-to-many mapping.
-    @OneToMany(mappedBy = "cart")
+  /*  @OneToMany(mappedBy = "Cart")
     private Set<Product> products;
+*/
 
-    //One cart can have one user, so here we have a one-to-one mapping.
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    //One user can have one cart, so here we have a one-to-one mapping.
+    @OneToOne(mappedBy = "shoppingCart", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private User user;
 
     public ShoppingCart() {
@@ -31,17 +32,6 @@ public class ShoppingCart {
         this.user = user;
     }
 
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
-
-    public void addProduct(Product products) {
-        this.products.add(products);
-    }
 
     public Long getId() {
         return id;

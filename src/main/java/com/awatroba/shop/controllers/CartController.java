@@ -49,8 +49,8 @@ public class CartController {
         try{
             model.addObject(SHOPPING_CART_PARAM,
                     cartService.getUsersShoppingCart(authentication));
-            model.addObject(PRODUCTS_PARAM,
-                    cartService.getUsersProductInShoppingCart(authentication));
+            //model.addObject(PRODUCTS_PARAM,
+                   // cartService.getUsersProductInShoppingCart(authentication));
         }catch (ShoppingCartNotFoundException e){
             model.addObject(MESSAGE_ERROR, e.getMessage());
         }
