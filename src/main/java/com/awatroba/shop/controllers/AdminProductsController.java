@@ -37,6 +37,11 @@ public class AdminProductsController {
         model.addObject(MESSAGE_SUCCESS, "");
     }
 
+    /**
+     * function get dashboard for user with ADMIN role
+     *
+     * @return ModelAndView with message and attribute
+     */
     @GetMapping("/admin")
     public ModelAndView getDashboard() {
         model.addObject(PRODUCTS_PARAM, (List<Product>) productsService.getAllProducts());
@@ -45,6 +50,11 @@ public class AdminProductsController {
         return model;
     }
 
+    /**
+     * function to adding product to database
+     * @param request create product request
+     * @return ModelAndView with message and attribute
+     */
     @PostMapping("/admin")
     public ModelAndView addProduct(@ModelAttribute CreateProductRequest request) {
         String mess = productsService.addNewProduct(request);
@@ -59,6 +69,11 @@ public class AdminProductsController {
         return model;
     }
 
+    /**
+     * function to deleting product from database
+     * @param id product id
+     * @return ModelAndView with message and attribute
+     */
     @DeleteMapping("/admin/{id}")
     public ModelAndView deleteProductById(@PathVariable("id") Long id) {
         productsService.deleteProduct(id);

@@ -77,7 +77,6 @@ public class ProductsService {
      * @param request create product request
      * @return errorMessage or ""
      */
-
     private String checkProductData(CreateProductRequest request) {
         if (request.getDescription().isEmpty() ||
                 request.getName().isEmpty())

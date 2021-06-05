@@ -27,6 +27,8 @@ public class LoginController {
     /**
      * function to process the log in user request
      *
+     * @param error  error message
+     * @param logout
      * @return ModelAndView with message
      */
     @RequestMapping("/login")

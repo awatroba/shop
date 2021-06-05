@@ -29,12 +29,24 @@ public class CartController {
         model.addObject(MESSAGE_SUCCESS, "");
     }
 
+    /**
+     * function get shopping cart for user
+     *
+     * @return ModelAndView with message and attribute
+     */
     @GetMapping("/cart")
     public ModelAndView getCard(Authentication authentication) {
         getBasicViewModel(authentication);
         return model;
     }
 
+    /**
+     * function to adding product to shopping cart
+     *
+     * @param id             product id
+     * @param authentication authentication for getting ser id
+     * @return ModelAndView with message and attribute
+     */
     @PostMapping("/cart/{id}")
     public ModelAndView addProductToCard(
             @PathVariable("id") Long id, Authentication authentication) {
@@ -43,6 +55,13 @@ public class CartController {
         return model;
     }
 
+    /**
+     * function to deleting product from shopping cart
+     *
+     * @param id             product id
+     * @param authentication authentication for getting ser id
+     * @return ModelAndView with message and attribute
+     */
     @DeleteMapping("/cart/{id}")
     public ModelAndView deleteProductById(@PathVariable("id") Long id, Authentication authentication) {
         cartService.deleteProduct(authentication, id);
@@ -50,6 +69,12 @@ public class CartController {
         return model;
     }
 
+    /**
+     * helpers function to get basic modelAndView
+     *
+     * @param authentication authentication for getting ser id
+     * @return ModelAndView with message and attribute
+     */
     public ModelAndView getBasicViewModel(Authentication authentication) {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
