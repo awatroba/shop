@@ -26,7 +26,7 @@ public class AdminProductsController {
     private static String DELL_MESS = "Product has been removed";
     private static String ADD_MESS = "Product has been added";
     private static String MODEL_NAME = "admin_panel";
-
+    private static String IS_ADMIN = "isAdmin";
 
     @Autowired
     public AdminProductsController(ProductsService productsService) {
@@ -35,6 +35,8 @@ public class AdminProductsController {
         model.addObject(CREATE_PRODUCT_REQUEST, new CreateProductRequest());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, true);
+
     }
 
     /**

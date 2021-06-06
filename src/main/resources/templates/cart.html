@@ -24,6 +24,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/dashboard" aria-disabled="false">Home</a>
                 </li>
+                <th:block th:if="${isAdmin == true}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin" aria-disabled="false">Admin Panel</a>
+                    </li>
+                </th:block>
             </ul>
             <form class="d-flex">
                 <input class="form-control" type="text" placeholder="Product Name" aria-label="Search">

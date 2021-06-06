@@ -1,12 +1,14 @@
 package com.awatroba.shop.controllers;
 
-import com.awatroba.shop.enums.CategoryProduct;
+import com.awatroba.shop.enums.Role;
 import com.awatroba.shop.exception.CategoryNotFoundException;
 import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.helpers.CreateUserRequest;
 import com.awatroba.shop.models.Product;
+import com.awatroba.shop.models.UserDetailsImp;
 import com.awatroba.shop.services.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ public class ProductsController {
     private static String CREATE_USER_REQUEST = "userRequest";
     private static String MESSAGE_ERROR = "messageError";
     private static String MESSAGE_SUCCESS = "messageSuccess";
+    private static String IS_ADMIN = "isAdmin";
     private static String PRODUCTS_PARAM = "products";
     private static String PRODUCT_PARAM = "product";
     private static String DASHBOARD_MODEL_NAME = "dashboard";
@@ -32,56 +35,79 @@ public class ProductsController {
         model.addObject(CREATE_USER_REQUEST, new CreateUserRequest());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, false);
     }
+
     /**
      * function get dashboard for user
      *
+     * @param authentication authentication for getting ser id
      * @return ModelAndView with message and attribute
      */
     @GetMapping("/dashboard")
-    public ModelAndView getDashboard() {
+    public ModelAndView getDashboard(Authentication authentication) {
         model.setViewName(DASHBOARD_MODEL_NAME);
         model.addObject(PRODUCTS_PARAM, productsService.getAllProducts());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, idAdmin(authentication));
         return model;
     }
+
     /**
      * function get product details by id
+     *
      * @param id             product id
+     * @param authentication authentication for getting ser id
      * @return ModelAndView with message and attribute
      */
     @GetMapping("/dashboard/{id}")
-    public ModelAndView getProductById(@PathVariable("id") Long id) {
+    public ModelAndView getProductById(@PathVariable("id") Long id, Authentication authentication) {
         model.setViewName(PROD_DET_MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
+        model.addObject(IS_ADMIN, idAdmin(authentication));
         model.addObject(MESSAGE_SUCCESS, "");
         try {
             model.addObject(PRODUCT_PARAM, productsService.getProductById(id));
-        }catch (ProductNotFoundException e){
+        } catch (ProductNotFoundException e) {
             model.addObject(MESSAGE_ERROR, e.getMessage());
             model.addObject(PRODUCT_PARAM, new Product());
         }
         return model;
     }
+
     /**
      * function get product details by id
-     * @param category             product category
+     *
+     * @param category       product category
+     * @param authentication authentication for getting ser id
      * @return ModelAndView with message and attribute
      */
     @GetMapping("/category/{category}")
-    public ModelAndView getProductByCategory(@PathVariable("category") String category) {
+    public ModelAndView getProductByCategory(@PathVariable("category") String category, Authentication authentication) {
         model.setViewName(DASHBOARD_MODEL_NAME);
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, idAdmin(authentication));
         try {
             model.addObject(PRODUCTS_PARAM, productsService.getAllProductsByCategory(category));
-        }catch (CategoryNotFoundException e){
+        } catch (CategoryNotFoundException e) {
             model.addObject(MESSAGE_ERROR, e.getMessage());
             return model;
         }
         model.addObject(MESSAGE_ERROR, "");
 
         return model;
+    }
+
+    /**
+     * function get tru if user is admin
+     *
+     * @param authentication authentication for getting ser id
+     * @return ModelAndView with message and attribute
+     */
+    public boolean idAdmin(Authentication authentication) {
+        Role role = ((UserDetailsImp) authentication.getPrincipal()).getUserRole();
+        return role.equals(Role.ADMIN) ? true : false;
     }
 
 }
