@@ -9,12 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Login request controller
  */
 @Controller()
-public class LoginController {
-    private static String MESSAGE_ERROR = "messageError";
-    private static String LOGIN_MESSAGE_ERROR = "Your username or password are invalid.";
-    private static String LOGGED_OUT_SUCC_MESSAGE = "You have been logged out successfully.";
-    private static String MESSAGE = "message";
-
+public class LoginController extends MyController {
     private ModelAndView model;
 
     public LoginController() {

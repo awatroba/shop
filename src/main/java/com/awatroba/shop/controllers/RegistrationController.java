@@ -16,10 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller()
-public class RegistrationController {
-    private static String CREATE_USER_REQUEST = "userRequest";
-    private static String MESSAGE_ERROR = "messageError";
-    private static String MESSAGE_SUCCESS = "messageSuccess";
+public class RegistrationController extends MyController{
     private ModelAndView model;
     private RegistrationService service;
 

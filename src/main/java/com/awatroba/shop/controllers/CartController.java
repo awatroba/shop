@@ -14,15 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CartController {
+public class CartController extends MyController {
     private ModelAndView model;
     private CartService cartService;
-
-    private static String MESSAGE_ERROR = "messageError";
-    private static String MESSAGE_SUCCESS = "messageSuccess";
-    private static String PRODUCTS_PARAM = "products";
-    private static String MODEL_NAME = "cart";
-    private static String IS_ADMIN = "isAdmin";
 
 
     @Autowired
@@ -92,16 +86,6 @@ public class CartController {
             model.addObject(MESSAGE_ERROR, e.getMessage());
         }
         return model;
-    }
-    /**
-     * function get tru if user is admin
-     *
-     * @param authentication authentication for getting ser id
-     * @return ModelAndView with message and attribute
-     */
-    public boolean idAdmin(Authentication authentication) {
-        Role role = ((UserDetailsImp) authentication.getPrincipal()).getUserRole();
-        return role.equals(Role.ADMIN) ? true : false;
     }
 
 
