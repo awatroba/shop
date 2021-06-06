@@ -30,7 +30,7 @@ public class MyController {
      * @param authentication authentication for getting ser id
      * @return ModelAndView with message and attribute
      */
-    public boolean idAdmin(Authentication authentication) {
+    protected boolean idAdmin(Authentication authentication) {
         Role role = ((UserDetailsImp) authentication.getPrincipal()).getUserRole();
         return role.equals(Role.ADMIN) ? true : false;
     }
