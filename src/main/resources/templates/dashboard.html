@@ -43,7 +43,7 @@
             <div class="dropdown-menu dropdown-menu-dark show" th:field="*{category}">
                 <h4 class="dropdown-header">Categories</h4>
                 <a class="dropdown-item" th:each="category : ${T(com.awatroba.shop.enums.CategoryProduct).values()}"
-                   th:href="@{'/dashboard/{category}'(category=${category.getDisplayName()})}"
+                   th:href="@{'/category/{category}'(category=${category.getDisplayName()})}"
                    th:text="${category.getDisplayName()}">
                 </a>
             </div>

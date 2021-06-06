@@ -1,5 +1,6 @@
 package com.awatroba.shop.database;
 
+import com.awatroba.shop.enums.CategoryProduct;
 import com.awatroba.shop.models.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,6 @@ public interface ProductRepo extends CrudRepository<Product, Long> {
 
     Iterable<Product> findAllByEnable(boolean enable);
 
-    Iterable<Product> findAllByCategoryAndEnable(String category, boolean enable);
+    Iterable<Product> findAllByCategoryAndEnable(CategoryProduct category, boolean enable);
 
 }
