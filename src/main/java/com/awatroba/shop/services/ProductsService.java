@@ -48,7 +48,6 @@ public class ProductsService {
                 CategoryProduct.stream().filter(c ->
                         c.getDisplayName().equals(category)).findFirst().
                         orElseThrow(() -> new CategoryNotFoundException());
-        
         return productRepo.findAllByCategoryAndEnable(categoryProduct, true);
     }
 
