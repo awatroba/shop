@@ -1,6 +1,8 @@
 package com.awatroba.shop.controllers;
 
+import com.awatroba.shop.enums.Role;
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
+import com.awatroba.shop.models.UserDetailsImp;
 import com.awatroba.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,14 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CartController {
+public class CartController extends MyController {
     private ModelAndView model;
     private CartService cartService;
 
-    private static String MESSAGE_ERROR = "messageError";
-    private static String MESSAGE_SUCCESS = "messageSuccess";
-    private static String PRODUCTS_PARAM = "products";
-    private static String MODEL_NAME = "cart";
 
     @Autowired
     public CartController(CartService cartService) {
@@ -27,6 +25,7 @@ public class CartController {
         model = new ModelAndView(MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, false);
     }
 
     /**
@@ -78,6 +77,8 @@ public class CartController {
     public ModelAndView getBasicViewModel(Authentication authentication) {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, idAdmin(authentication));
+
         try {
             model.addObject(PRODUCTS_PARAM,
                     cartService.getUsersShoppingCart(authentication).getProducts());
@@ -86,6 +87,7 @@ public class CartController {
         }
         return model;
     }
+
 
 
 }

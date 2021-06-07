@@ -1,5 +1,6 @@
 package com.awatroba.shop.models;
 
+import com.awatroba.shop.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,6 +36,9 @@ public class UserDetailsImp implements UserDetails {
     }
     public Long getUserId() {
         return this.user.getId();
+    }
+    public Role getUserRole() {
+        return this.user.getRole();
     }
 
     @Override

@@ -16,17 +16,9 @@ import java.util.List;
  */
 
 @Controller()
-public class AdminProductsController {
+public class AdminProductsController extends MyController {
     private ModelAndView model;
     private ProductsService productsService;
-    private static String CREATE_PRODUCT_REQUEST = "productRequest";
-    private static String MESSAGE_ERROR = "messageError";
-    private static String MESSAGE_SUCCESS = "messageSuccess";
-    private static String PRODUCTS_PARAM = "products";
-    private static String DELL_MESS = "Product has been removed";
-    private static String ADD_MESS = "Product has been added";
-    private static String MODEL_NAME = "admin_panel";
-
 
     @Autowired
     public AdminProductsController(ProductsService productsService) {
@@ -35,6 +27,7 @@ public class AdminProductsController {
         model.addObject(CREATE_PRODUCT_REQUEST, new CreateProductRequest());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
+        model.addObject(IS_ADMIN, true);
     }
 
     /**
