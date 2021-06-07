@@ -54,7 +54,8 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/dashboard").hasAnyRole(new String[]{"ADMIN", "USER"})
                 .antMatchers(HttpMethod.GET, "/dashboard/**").hasAnyRole(new String[]{"ADMIN", "USER"})
 
-                .antMatchers( "/cart").hasAnyRole(new String[]{ "USER"})
+                .antMatchers( "/cart").hasAnyRole(new String[]{ "ADMIN","USER"})
+                .antMatchers( "/cart/**").hasAnyRole(new String[]{ "ADMIN","USER"})
 
                 .antMatchers( "/category/**").hasAnyRole(new String[]{"ADMIN", "USER"})
 

@@ -17,4 +17,12 @@ public class GlobalExceptionHandler extends MyController {
         modelAndView.addObject(MESSAGE_ERROR, ex.getMessage());
         return modelAndView;
     }
+    @ExceptionHandler({Exception.class})
+    public ModelAndView handleException(Exception ex)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(ERROR_MODEL_NAME);
+        modelAndView.addObject(MESSAGE_ERROR, ex.getMessage());
+        return modelAndView;
+    }
 }
