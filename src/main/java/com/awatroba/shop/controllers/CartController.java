@@ -22,7 +22,7 @@ public class CartController extends MyController {
     @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
-        model = new ModelAndView(MODEL_NAME);
+        model = new ModelAndView(SHOPPING_CART_MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
         model.addObject(IS_ADMIN, false);

@@ -23,7 +23,7 @@ public class AdminProductsController extends MyController {
     @Autowired
     public AdminProductsController(ProductsService productsService) {
         this.productsService = productsService;
-        model = new ModelAndView(MODEL_NAME);
+        model = new ModelAndView(ADMIN_PANEL_MODEL_NAME);
         model.addObject(CREATE_PRODUCT_REQUEST, new CreateProductRequest());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");

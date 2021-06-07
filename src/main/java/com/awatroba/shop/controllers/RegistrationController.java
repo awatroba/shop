@@ -23,7 +23,7 @@ public class RegistrationController extends MyController{
     @Autowired
     public RegistrationController(RegistrationService service) {
         this.service = service;
-        model = new ModelAndView("register");
+        model = new ModelAndView(REGISTER_MODEL_NAME);
         model.addObject(CREATE_USER_REQUEST,new CreateUserRequest());
         model.addObject(MESSAGE_ERROR,"");
         model.addObject(MESSAGE_SUCCESS,"");
