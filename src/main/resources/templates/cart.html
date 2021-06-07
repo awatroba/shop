@@ -30,14 +30,16 @@
                     </li>
                 </th:block>
             </ul>
-            <form class="d-flex">
-                <input class="form-control" type="text" placeholder="Product Name" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
-            </form>
+
             <form class="d-flex" action="#" th:action="@{'/cart'}" th:method="GET">
                 <button class="btn btn-outline-secondary" type="submit">
                     <img src="https://img.icons8.com/material/24/ffffff/shopping-cart--v1.png"/>
                 </button>
+            </form>
+            <form class="d-flex">
+                <li class="nav-item active">
+                    <a class="badge badge-success" href="/logout">Logout</a>
+                </li>
             </form>
         </div>
     </div>
