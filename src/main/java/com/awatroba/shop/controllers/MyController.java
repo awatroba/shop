@@ -29,6 +29,7 @@ public class MyController {
     protected static String DASHBOARD_MODEL_NAME = "dashboard";
     protected static String PROD_DET_MODEL_NAME = "showProduct";
     protected static String ADMIN_PANEL_MODEL_NAME = "admin_panel";
+    protected static String ERROR_MODEL_NAME = "error";
 
 
     /**
