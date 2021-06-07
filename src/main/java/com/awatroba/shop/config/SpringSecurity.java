@@ -1,5 +1,6 @@
 package com.awatroba.shop.config;
 
+import com.awatroba.shop.exception.CustomAccessDeniedHandler;
 import com.awatroba.shop.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * @author Angelika
@@ -25,6 +27,10 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
     LoginService loginService;
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
 
     /**
      * method defines authentication method
@@ -63,7 +69,9 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()/*for h2 console*/
                 .headers().frameOptions().disable()
 
-                .and().httpBasic() .and().cors().disable();
+                .and().httpBasic() .and().cors().disable()
+
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 
     /**

@@ -13,7 +13,7 @@ public class LoginController extends MyController {
     private ModelAndView model;
 
     public LoginController() {
-        model = new ModelAndView("login");
+        model = new ModelAndView(LOGIN_MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE, "");
 
