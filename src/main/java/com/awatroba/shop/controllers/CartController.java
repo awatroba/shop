@@ -1,8 +1,6 @@
 package com.awatroba.shop.controllers;
 
-import com.awatroba.shop.enums.Role;
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
-import com.awatroba.shop.models.UserDetailsImp;
 import com.awatroba.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,6 +24,7 @@ public class CartController extends MyController {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
         model.addObject(IS_ADMIN, false);
+        model.addObject(TOTAL_PARAM, 0);
     }
 
     /**
@@ -36,6 +35,26 @@ public class CartController extends MyController {
     @GetMapping("/cart")
     public ModelAndView getCard(Authentication authentication) {
         getBasicViewModel(authentication);
+        return model;
+    }
+
+    /**
+     * function get shopping cart for user
+     *
+     * @return ModelAndView with message and attribute
+     */
+    @GetMapping("/buy")
+    public ModelAndView buy(Authentication authentication) {
+        if (cartService.getUsersShoppingCart(authentication).getProducts().size() > 0) {
+            cartService.deleteAllProducts(authentication);
+            getBasicViewModel(authentication);
+            model.addObject(MESSAGE_SUCCESS, BUY_SUCCESS_MESS);
+        } else {
+            getBasicViewModel(authentication);
+            model.addObject(MESSAGE_ERROR, SHOPPING_CART_EMPTY);
+        }
+
+
         return model;
     }
 
@@ -78,16 +97,13 @@ public class CartController extends MyController {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
         model.addObject(IS_ADMIN, idAdmin(authentication));
-
         try {
             model.addObject(PRODUCTS_PARAM,
                     cartService.getUsersShoppingCart(authentication).getProducts());
+            model.addObject(TOTAL_PARAM, cartService.getTotalInCart(authentication));
         } catch (ShoppingCartNotFoundException e) {
             model.addObject(MESSAGE_ERROR, e.getMessage());
         }
         return model;
     }
-
-
-
 }

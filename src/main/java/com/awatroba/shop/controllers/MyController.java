@@ -3,6 +3,7 @@ package com.awatroba.shop.controllers;
 import com.awatroba.shop.enums.Role;
 import com.awatroba.shop.models.UserDetailsImp;
 import org.springframework.security.core.Authentication;
+
 /**
  * @author Angelika
  * class containing common elements for all controllers
@@ -20,7 +21,12 @@ public class MyController {
     protected static String IS_ADMIN = "isAdmin";
     protected static String CREATE_USER_REQUEST = "userRequest";
     protected static String PRODUCT_PARAM = "product";
+    protected static String TOTAL_PARAM = "total";
     protected static String ACCESS_DENIED_ERROR_MESS = "You do not have sufficient permissions for these resources";
+    protected static String BUY_SUCCESS_MESS = "Products have been purchased, thank you for shopping";
+    protected static String DEL_SUCCESS_MESS = "Products have been removed";
+    protected static String SHOPPING_CART_EMPTY = "Shopping cart is empty!";
+
 
     protected static String SHOPPING_CART_MODEL_NAME = "cart";
     protected static String ACCESS_DENIED_CART_MODEL_NAME = "accessDenied";

@@ -105,4 +105,27 @@ public class CartService {
 
         return prodToDelete;
     }
+
+    /**
+     * helpers function to get total in shopping cart
+     *
+     * @param authentication authentication for getting ser id
+     * @return total
+     */
+    public double getTotalInCart(Authentication authentication) {
+        return getUsersShoppingCart(authentication).
+                getProducts().stream()
+                .mapToDouble(
+                        p -> p.getPrice())
+                .sum();
+    }
+
+    public void deleteAllProducts(Authentication authentication) {
+        ShoppingCart cart = getUsersShoppingCart(authentication);
+        cart.getProducts().stream().forEach(p->p.setCart(null));
+
+        productRepo.saveAll(cart.getProducts());
+        cart.getProducts().clear();
+        cartRepo.save(cart);
+    }
 }
