@@ -44,6 +44,21 @@
         </div>
     </div>
 </nav>
+
+<div class="container text-center">
+    <!-- Message  -->
+    <th:block th:if="${messageError != ''}">
+        <div class="alert alert-danger" role="alert">
+            <p th:text="${messageError}"></p>
+        </div>
+    </th:block>
+    <th:block th:if="${messageSuccess != ''}">
+        <div class="alert alert-success " role="alert">
+            <p th:text="${messageSuccess}"></p>
+        </div>
+    </th:block>
+</div>
+
 <div class="container">
     <table class="table table-sm table-striped">
         <thead>
@@ -69,13 +84,35 @@
                         <img src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
                     </button>
                 </form>
-
             </td>
         </tr>
         </tr>
         </tbody>
     </table>
-    <hr/>
+    <table class="table table-sm table-striped">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">TOTAL</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <tr>
+            <td class="col-md-9"></td>
+            <td class="col-md-1" th:text="${total}"></td>
+            <td class="col-md-1">
+                <form action="/buy" method="get">
+                    <button type="submit" class="btn btn-outline-warning" id="addSubmitButton">
+                        BUY
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
