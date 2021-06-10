@@ -1,11 +1,9 @@
 package com.awatroba.shop.controllers;
 
-import com.awatroba.shop.enums.Role;
 import com.awatroba.shop.exception.CategoryNotFoundException;
 import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.helpers.CreateUserRequest;
 import com.awatroba.shop.models.Product;
-import com.awatroba.shop.models.UserDetailsImp;
 import com.awatroba.shop.services.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,7 +39,7 @@ public class ProductsController extends MyController {
         model.addObject(PRODUCTS_PARAM, productsService.getAllProducts());
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
-        model.addObject(IS_ADMIN, idAdmin(authentication));
+        model.addObject(IS_ADMIN, isAdmin(authentication));
         return model;
     }
 
@@ -56,7 +54,7 @@ public class ProductsController extends MyController {
     public ModelAndView getProductById(@PathVariable("id") Long id, Authentication authentication) {
         model.setViewName(PROD_DET_MODEL_NAME);
         model.addObject(MESSAGE_ERROR, "");
-        model.addObject(IS_ADMIN, idAdmin(authentication));
+        model.addObject(IS_ADMIN, isAdmin(authentication));
         model.addObject(MESSAGE_SUCCESS, "");
         try {
             model.addObject(PRODUCT_PARAM, productsService.getProductById(id));
@@ -78,7 +76,7 @@ public class ProductsController extends MyController {
     public ModelAndView getProductByCategory(@PathVariable("category") String category, Authentication authentication) {
         model.setViewName(DASHBOARD_MODEL_NAME);
         model.addObject(MESSAGE_SUCCESS, "");
-        model.addObject(IS_ADMIN, idAdmin(authentication));
+        model.addObject(IS_ADMIN, isAdmin(authentication));
         try {
             model.addObject(PRODUCTS_PARAM, productsService.getAllProductsByCategory(category));
         } catch (CategoryNotFoundException e) {
