@@ -26,6 +26,9 @@ public class MyController {
     protected static String BUY_SUCCESS_MESS = "Products have been purchased, thank you for shopping";
     protected static String DEL_SUCCESS_MESS = "Products have been removed";
     protected static String SHOPPING_CART_EMPTY = "Shopping cart is empty!";
+    protected static String BUY_BUTTON_CLICK = "buy";
+    protected static String ORDER = "order";
+    protected static String BUY_REQUEST = "buyRequest";
 
 
     protected static String SHOPPING_CART_MODEL_NAME = "cart";
@@ -44,7 +47,7 @@ public class MyController {
      * @param authentication authentication for getting ser id
      * @return ModelAndView with message and attribute
      */
-    protected boolean idAdmin(Authentication authentication) {
+    protected boolean isAdmin(Authentication authentication) {
         Role role = ((UserDetailsImp) authentication.getPrincipal()).getUserRole();
         return role.equals(Role.ADMIN) ? true : false;
     }
