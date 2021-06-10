@@ -20,7 +20,7 @@ public enum PayMethod {
         return displayName;
     }
 
-    public static Stream<CategoryProduct> stream() {
-        return Stream.of(CategoryProduct.values());
+    public static Stream<PayMethod> stream() {
+        return Stream.of(PayMethod.values());
     }
 }
