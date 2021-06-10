@@ -67,7 +67,9 @@
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Price</th>
-            <th scope="col">Delete</th>
+            <th:block th:if="${deliveryAndPaymentClicked != true}">
+                <th scope="col">Delete</th>
+            </th:block>
         </tr>
         </thead>
         <tbody>
@@ -77,14 +79,16 @@
             <td class="col-md-3" th:text="${product.getName()}"></td>
             <td class="col-md-6" th:text="${product.getDescription()}"></td>
             <td class="col-md-1" th:text="${product.getPrice()}"></td>
-            <td class="col-md-1">
-                <form action="#" th:action="@{'/cart/{id}'(id=${product.getId()})}" th:method="delete">
-                    <input type="hidden" name="_method" value="delete"/>
-                    <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">
-                        <img src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
-                    </button>
-                </form>
-            </td>
+            <th:block th:if="${deliveryAndPaymentClicked != true}">
+                <td class="col-md-1">
+                    <form action="#" th:action="@{'/cart/{id}'(id=${product.getId()})}" th:method="delete">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-outline-danger" id="deleteSubmitButton">
+                            <img src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
+                        </button>
+                    </form>
+                </td>
+            </th:block>
         </tr>
         </tr>
         </tbody>
@@ -100,12 +104,12 @@
         <tbody>
         <tr>
         <tr>
-            <td class="col-md-9"></td>
+            <td class="col-md-8"></td>
             <td class="col-md-1" th:text="${total}"></td>
-            <td class="col-md-1">
-                <form action="/buy" method="get">
-                    <button type="submit" class="btn btn-outline-warning" id="addSubmitButton">
-                        BUY
+            <td class="col-md-2">
+                <form action="/order" method="get">
+                    <button type="submit" class="btn btn-outline-warning" id="orderSubmitButton">
+                        Delivery and Payment
                     </button>
                 </form>
             </td>
@@ -114,6 +118,44 @@
         </tbody>
     </table>
 </div>
+<!-- UserOrder Details-->
+<th:block th:if="${deliveryAndPaymentClicked == true}">
+    <div class="container text-center">
+        <hr/>
+        <h1><strong>Select your purchase details</strong></h1>
+        <hr/>
+    </div>
+    <div class="col">
+        <div class="container">
+            <form class="row g-3 needs-validation" th:action="@{/buy}" th:object="${buyRequest}" method="post">
+                <div class="col-md-4">
+                    <label for="payMethod" id="payMethod" class="form-label">Pay Method</label>
+                    <select class="form-select">
+                        <option th:each="payMethod : ${T(com.awatroba.shop.enums.PayMethod).values()}"
+                                th:value="${payMethod}"
+                                th:text="${payMethod.getDisplayName()}">
+                        </option>
+                    </select>
+
+                </div>
+                <div class="col-md-4">
+                    <label for="payMethod" id="deliveryMethod" class="form-label">Delivery Method</label>
+                    <select class="form-select">
+                        <option th:each="deliveryMethod : ${T(com.awatroba.shop.enums.DeliveryMethod).values()}"
+                                th:value="${deliveryMethod}"
+                                th:text="${deliveryMethod.getDisplayName()}">
+                        </option>
+                    </select>
+
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary " type="submit">Buy and Pay</button>
+                </div>
+            </form>
+            <div id="postResultDiv"></div>
+            <hr/>
+        </div>
+</th:block>
 
 <!-- Optional JavaScript; choose one of the two! -->
 

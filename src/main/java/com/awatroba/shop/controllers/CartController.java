@@ -1,22 +1,22 @@
 package com.awatroba.shop.controllers;
 
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
+import com.awatroba.shop.helpers.BuyRequest;
 import com.awatroba.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @author Angelika
+ * Shopping cart controoller
+ */
 @Controller
 public class CartController extends MyController {
     private ModelAndView model;
     private CartService cartService;
-
-
     @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
@@ -25,6 +25,8 @@ public class CartController extends MyController {
         model.addObject(MESSAGE_SUCCESS, "");
         model.addObject(IS_ADMIN, false);
         model.addObject(TOTAL_PARAM, 0);
+        model.addObject(BUY_BUTTON_CLICK, false);
+        model.addObject(BUY_REQUEST, new BuyRequest());
     }
 
     /**
@@ -34,27 +36,10 @@ public class CartController extends MyController {
      */
     @GetMapping("/cart")
     public ModelAndView getCard(Authentication authentication) {
+        model.addObject(PAY_CLICKED,false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+
         getBasicViewModel(authentication);
-        return model;
-    }
-
-    /**
-     * function get shopping cart for user
-     *
-     * @return ModelAndView with message and attribute
-     */
-    @GetMapping("/buy")
-    public ModelAndView buy(Authentication authentication) {
-        if (cartService.getUsersShoppingCart(authentication).getProducts().size() > 0) {
-            cartService.deleteAllProducts(authentication);
-            getBasicViewModel(authentication);
-            model.addObject(MESSAGE_SUCCESS, BUY_SUCCESS_MESS);
-        } else {
-            getBasicViewModel(authentication);
-            model.addObject(MESSAGE_ERROR, SHOPPING_CART_EMPTY);
-        }
-
-
         return model;
     }
 
@@ -68,6 +53,9 @@ public class CartController extends MyController {
     @PostMapping("/cart/{id}")
     public ModelAndView addProductToCard(
             @PathVariable("id") Long id, Authentication authentication) {
+        model.addObject(PAY_CLICKED,false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+
         cartService.addProductToCart(authentication, id);
         getBasicViewModel(authentication);
         return model;
@@ -82,6 +70,9 @@ public class CartController extends MyController {
      */
     @DeleteMapping("/cart/{id}")
     public ModelAndView deleteProductById(@PathVariable("id") Long id, Authentication authentication) {
+        model.addObject(PAY_CLICKED,false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+
         cartService.deleteProduct(authentication, id);
         getBasicViewModel(authentication);
         return model;
@@ -96,7 +87,10 @@ public class CartController extends MyController {
     public ModelAndView getBasicViewModel(Authentication authentication) {
         model.addObject(MESSAGE_ERROR, "");
         model.addObject(MESSAGE_SUCCESS, "");
-        model.addObject(IS_ADMIN, idAdmin(authentication));
+        model.addObject(IS_ADMIN, isAdmin(authentication));
+        model.addObject(BUY_BUTTON_CLICK, false);
+        model.addObject(ORDER, null);
+        model.addObject(BUY_REQUEST, new BuyRequest());
         try {
             model.addObject(PRODUCTS_PARAM,
                     cartService.getUsersShoppingCart(authentication).getProducts());
@@ -106,4 +100,25 @@ public class CartController extends MyController {
         }
         return model;
     }
+
+    /**
+     * function for make order
+     *
+     * @return ModelAndView with message and attribute
+     */
+    @GetMapping("/order")
+    public ModelAndView makeOrder(Authentication authentication) {
+
+        if (cartService.getUsersShoppingCart(authentication).getProducts().size() > 0) {
+            getBasicViewModel(authentication);
+            model.addObject(ORDER, cartService.makeOrder(authentication));
+            model.addObject(PAY_CLICKED,false);
+            model.addObject(DELIVERY_AND_PAY_CLICKED,true);
+        } else {
+            getBasicViewModel(authentication);
+            model.addObject(MESSAGE_ERROR, SHOPPING_CART_EMPTY);
+        }
+        return model;
+    }
+   
 }
