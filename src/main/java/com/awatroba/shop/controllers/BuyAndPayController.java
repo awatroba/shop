@@ -34,6 +34,7 @@ public class BuyAndPayController extends MyController {
     public ModelAndView buy(@ModelAttribute BuyRequest request) {
         model = new ModelAndView(service.getViewName(request));
         model = service.getModelAndView(request);
+        model.addObject(PAY_SUCCESS,false);
         return model;
     }
     /**
@@ -45,9 +46,10 @@ public class BuyAndPayController extends MyController {
     public ModelAndView pay(@ModelAttribute PayRequest request) {
        PayStrategy payStrategy= (PayStrategy) model.getModel().get(PayStrategy.PAY_STRATEGY);
         if(payStrategy.verify(request) && payStrategy.pay(request) ){
-            model.addObject(MyController.MESSAGE_SUCCESS,MyController.PAY_SUCCESS);
+            model.addObject(MESSAGE_SUCCESS, MyController.PAY_SUCCESS_MESS);
+            model.addObject(PAY_SUCCESS,true);
         }else{
-            model.addObject(MyController.MESSAGE_ERROR,MyController.PAY_ERROR);
+            model.addObject(MESSAGE_ERROR,MyController.PAY_ERROR);
         }
         return model;
     }

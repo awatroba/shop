@@ -25,6 +25,7 @@ public class MyController {
     protected static String TOTAL_PARAM = "total";
     protected static String ACCESS_DENIED_ERROR_MESS = "You do not have sufficient permissions for these resources";
     protected static String BUY_SUCCESS_MESS = "Products have been purchased, thank you for shopping";
+    protected static String PAY_SUCCESS = "paySuccess";
     protected static String DEL_SUCCESS_MESS = "Products have been removed";
     protected static String SHOPPING_CART_EMPTY = "Shopping cart is empty!";
     protected static String BUY_BUTTON_CLICK = "buy";
@@ -42,7 +43,7 @@ public class MyController {
     protected static String ADMIN_PANEL_MODEL_NAME = "admin_panel";
     protected static String ERROR_MODEL_NAME = "error";
     protected static String PAY_ERROR = "Problem with payment, try again";
-    protected static String PAY_SUCCESS = "Payment was successful, thank you for shopping";
+    protected static String PAY_SUCCESS_MESS = "Payment was successful, thank you for shopping";
 
 
     /**
