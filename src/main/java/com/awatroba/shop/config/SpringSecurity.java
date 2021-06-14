@@ -15,7 +15,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * @author Angelika
- * SpringSecurity class is annotated with @EnableWebSecurity to enable Spring Security’s
+ * SpringSecurity class is annotated with @EnableWebSecurity to enable Spring Security’isAdmin
  * web security support and provide the Spring MVC integration.
  * It also extends WebSecurityConfigurerAdapter and overrides a couple of its methods to set some
  * specifics of the web security configuration.
@@ -57,6 +57,15 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers( "/cart").hasAnyRole(new String[]{ "ADMIN","USER"})
                 .antMatchers( "/cart/**").hasAnyRole(new String[]{ "ADMIN","USER"})
 
+                .antMatchers( "/order").hasAnyRole(new String[]{ "ADMIN","USER"})
+                .antMatchers( "/order/**").hasAnyRole(new String[]{ "ADMIN","USER"})
+
+                .antMatchers( "/buy").hasAnyRole(new String[]{ "ADMIN","USER"})
+                .antMatchers( "/buy/**").hasAnyRole(new String[]{ "ADMIN","USER"})
+
+                .antMatchers( "/pay").hasAnyRole(new String[]{ "ADMIN","USER"})
+                .antMatchers( "/pay/**").hasAnyRole(new String[]{ "ADMIN","USER"})
+
                 .antMatchers( "/category/**").hasAnyRole(new String[]{"ADMIN", "USER"})
 
                 .antMatchers("/admin").hasRole("ADMIN")
@@ -85,5 +94,4 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    ;
 }

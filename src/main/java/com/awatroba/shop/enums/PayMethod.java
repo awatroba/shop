@@ -1,7 +1,7 @@
 package com.awatroba.shop.enums;
 
 import pay.PayCreditCard;
-import pay.PayPayPal;
+import pay.PayBlik;
 import pay.PayStrategy;
 
 import java.util.stream.Stream;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  */
 public enum PayMethod {
     CREDIT_CARD("Credit Cart",new PayCreditCard()),
-    PAY_PAL("Pay pal",new PayPayPal());
+    BLIK("BLIK",new PayBlik());
     private String displayName;
     private PayStrategy payStrategy;
 

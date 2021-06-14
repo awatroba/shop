@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Angelika
- * Shopping cart controoller
+ * Shopping cart controller
  */
 @Controller
 public class CartController extends MyController {
@@ -26,7 +26,6 @@ public class CartController extends MyController {
         model.addObject(IS_ADMIN, false);
         model.addObject(TOTAL_PARAM, 0);
         model.addObject(BUY_BUTTON_CLICK, false);
-        model.addObject(BUY_REQUEST, new BuyRequest());
     }
 
     /**
@@ -90,7 +89,7 @@ public class CartController extends MyController {
         model.addObject(IS_ADMIN, isAdmin(authentication));
         model.addObject(BUY_BUTTON_CLICK, false);
         model.addObject(ORDER, null);
-        model.addObject(BUY_REQUEST, new BuyRequest());
+        model.addObject(BUY_REQUEST, new BuyRequest(getUserId(authentication)));
         try {
             model.addObject(PRODUCTS_PARAM,
                     cartService.getUsersShoppingCart(authentication).getProducts());
@@ -108,7 +107,6 @@ public class CartController extends MyController {
      */
     @GetMapping("/order")
     public ModelAndView makeOrder(Authentication authentication) {
-
         if (cartService.getUsersShoppingCart(authentication).getProducts().size() > 0) {
             getBasicViewModel(authentication);
             model.addObject(ORDER, cartService.makeOrder(authentication));
@@ -120,5 +118,5 @@ public class CartController extends MyController {
         }
         return model;
     }
-   
+
 }

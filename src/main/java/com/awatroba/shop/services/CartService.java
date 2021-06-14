@@ -1,6 +1,7 @@
 package com.awatroba.shop.services;
 
 import com.awatroba.shop.database.CartRepo;
+import com.awatroba.shop.database.OrderRepo;
 import com.awatroba.shop.database.ProductRepo;
 import com.awatroba.shop.database.UserRepo;
 import com.awatroba.shop.exception.ProductNotFoundException;
@@ -8,6 +9,7 @@ import com.awatroba.shop.exception.ShoppingCartNotFoundException;
 import com.awatroba.shop.models.Product;
 import com.awatroba.shop.models.ShoppingCart;
 import com.awatroba.shop.models.UserDetailsImp;
+import com.awatroba.shop.models.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,16 @@ import java.util.Optional;
 @Service
 public class CartService {
     private CartRepo cartRepo;
+    private OrderRepo orderRepo;
     private UserRepo userRepo;
     private ProductRepo productRepo;
 
     @Autowired
-    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo) {
+    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo,OrderRepo orderRepo) {
         this.cartRepo = cartRepo;
         this.userRepo = userRepo;
         this.productRepo = productRepo;
+        this.orderRepo = orderRepo;
     }
 
     /**
@@ -128,4 +132,13 @@ public class CartService {
         cart.getProducts().clear();
         cartRepo.save(cart);
     }
+
+    public UserOrder makeOrder(Authentication authentication) {
+        //double total=getTotalInCart(authentication);
+        //Set<Product> products = getUsersShoppingCart(authentication).getProducts();
+       // return new Order(total,products);
+        return new UserOrder();
+    }
+
+
 }

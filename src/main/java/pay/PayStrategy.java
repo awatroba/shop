@@ -1,15 +1,20 @@
 package pay;
 
+import com.awatroba.shop.helpers.PayRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 
 /**
  * @author Angelika
  * Interface for all pay strategies.
  */
 public interface PayStrategy {
-    boolean pay(int paymentAmount);
+    static String PAY_STRATEGY = "payStrategy";
+    static String PAY_REQUEST = "payRequest";
+    static String PAY_SUCCESS = "payRequest";
+
+    boolean pay(PayRequest payRequest);
     ModelAndView getModelAndView();
-    void collectPaymentDetails();
     String getViewName();
-    boolean verify();
+    boolean verify(PayRequest payRequest);
 }

@@ -122,7 +122,7 @@
 <th:block th:if="${deliveryAndPaymentClicked == true}">
     <div class="container text-center">
         <hr/>
-        <h1><strong>Select your purchase details</strong></h1>
+        <h1><strong>Select purchase details</strong></h1>
         <hr/>
     </div>
     <div class="col">
@@ -130,7 +130,7 @@
             <form class="row g-3 needs-validation" th:action="@{/buy}" th:object="${buyRequest}" method="post">
                 <div class="col-md-4">
                     <label for="payMethod" id="payMethod" class="form-label">Pay Method</label>
-                    <select class="form-select">
+                    <select class="form-select"  th:field="*{payMethod}">
                         <option th:each="payMethod : ${T(com.awatroba.shop.enums.PayMethod).values()}"
                                 th:value="${payMethod}"
                                 th:text="${payMethod.getDisplayName()}">
@@ -140,7 +140,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="payMethod" id="deliveryMethod" class="form-label">Delivery Method</label>
-                    <select class="form-select">
+                    <select class="form-select" th:field="*{deliveryMethod}">
                         <option th:each="deliveryMethod : ${T(com.awatroba.shop.enums.DeliveryMethod).values()}"
                                 th:value="${deliveryMethod}"
                                 th:text="${deliveryMethod.getDisplayName()}">
