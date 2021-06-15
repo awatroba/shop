@@ -59,6 +59,21 @@
             </th:block>
         </div>
 
+        <th:block th:if="${paySuccess != true}">
+            <div class="container text-center">
+                <form class="row g-3 needs-validation" th:action="@{/pay}" th:object="${payRequest}" method="post">
+                    <div th:each="data : ${payRequest.data.entrySet()}">
+                        <div class="form-group">
+                            <label th:for="*{data['__${data.key}__']}" th:text="${data.key}">Property</label>
+                            <input type="text" class="form-control" th:field="*{data['__${data.key}__']}"/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary " type="submit">PAY</button>
+                    </div>
+                </form>
+            </div>
+        </th:block>
     </div>
 
 
