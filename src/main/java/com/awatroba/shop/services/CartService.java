@@ -6,6 +6,7 @@ import com.awatroba.shop.database.ProductRepo;
 import com.awatroba.shop.database.UserRepo;
 import com.awatroba.shop.exception.ProductNotFoundException;
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
+import com.awatroba.shop.helpers.BuyRequest;
 import com.awatroba.shop.models.Product;
 import com.awatroba.shop.models.ShoppingCart;
 import com.awatroba.shop.models.UserDetailsImp;
@@ -13,6 +14,7 @@ import com.awatroba.shop.models.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -27,8 +29,10 @@ public class CartService {
     private UserRepo userRepo;
     private ProductRepo productRepo;
 
+    private UserOrder order;
+
     @Autowired
-    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo,OrderRepo orderRepo) {
+    public CartService(CartRepo cartRepo, UserRepo userRepo, ProductRepo productRepo, OrderRepo orderRepo) {
         this.cartRepo = cartRepo;
         this.userRepo = userRepo;
         this.productRepo = productRepo;
@@ -90,11 +94,10 @@ public class CartService {
     /**
      * function delete product from Cart
      *
-     * @param authentication authentication for getting ser id
      * @param productId
      * @return deleted product
      */
-    public Product deleteProduct(Authentication authentication, Long productId) {
+    public Product deleteProduct(Long productId, Authentication authentication) {
         Product prodToDelete =
                 Optional.of(getProductById(productId)).orElseThrow(
                         () -> new ProductNotFoundException());
@@ -124,21 +127,49 @@ public class CartService {
                 .sum();
     }
 
-    public void deleteAllProducts(Authentication authentication) {
-        ShoppingCart cart = getUsersShoppingCart(authentication);
-        cart.getProducts().stream().forEach(p->p.setCart(null));
-
-        productRepo.saveAll(cart.getProducts());
-        cart.getProducts().clear();
-        cartRepo.save(cart);
-    }
-
+    //TODO: add exception
     public UserOrder makeOrder(Authentication authentication) {
-        //double total=getTotalInCart(authentication);
-        //Set<Product> products = getUsersShoppingCart(authentication).getProducts();
-       // return new Order(total,products);
-        return new UserOrder();
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
+
+        order = new UserOrder(shoppingCart.getUser());
+        orderRepo.save(order);
+
+        order.setProducts(shoppingCart.getProducts());
+        order.setClosed(false);
+        order.setTotalCost(getTotalInCart(authentication));
+        return order;
     }
 
+    //TODO exception handler
+    public String getViewName(BuyRequest request) {
+        return request.getPayMethod().getPayStrategy().getViewName();
+    }
 
+    //TODO exception handler
+    public ModelAndView getModelAndView(BuyRequest request, ModelAndView modelAndView) {
+        return request.getPayMethod().getPayStrategy().getModelAndView(modelAndView);
+    }
+
+    //TODO: add exception
+    public UserOrder addOrderDetails(BuyRequest request) {
+        order.setDeliveryMethod(request.getDeliveryMethod());
+        order.setPayMethod(request.getPayMethod());
+        order.setClosed(false);
+
+        order.getProducts().stream().forEach(p -> p.setUserOrder(order));
+        productRepo.saveAll(order.getProducts());
+
+        orderRepo.save(order);
+        return order;
+    }
+
+    //TODO: add exception
+    public void closeAndSaveOrder(Authentication authentication) {
+        order.setClosed(true);
+        orderRepo.save(order);
+
+        ShoppingCart shoppingCart = getUsersShoppingCart(authentication);
+        shoppingCart.getProducts().clear();
+        cartRepo.save(shoppingCart);
+    }
 }

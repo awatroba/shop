@@ -39,7 +39,7 @@ public class Product {
 
     //One order can have many product, so here we have a one-to-many mapping.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_order_id")
+    @JoinColumn(name="order_id")
     private UserOrder userOrder;
 
     public Product() {
@@ -108,6 +108,7 @@ public class Product {
     public void setName(String name) {
         this.name = name;
     }
+
 
     public UserOrder getUserOrder() {
         return userOrder;

@@ -23,8 +23,8 @@ public class PayCreditCard implements PayStrategy {
     }
 
     @Override
-    public ModelAndView getModelAndView() {
-        ModelAndView model = new ModelAndView(viewName);
+    public ModelAndView getModelAndView(ModelAndView model) {
+        model.setViewName(viewName);
         model.addObject(MyController.MESSAGE_ERROR, "");
         model.addObject(MyController.MESSAGE_SUCCESS, "");
         model.addObject(PAY_REQUEST, new BlikRequest());

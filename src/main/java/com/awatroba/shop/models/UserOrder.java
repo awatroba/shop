@@ -1,13 +1,17 @@
 package com.awatroba.shop.models;
 
+import com.awatroba.shop.enums.DeliveryMethod;
+import com.awatroba.shop.enums.PayMethod;
+
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author Angelika
  * Object that stores order data.
  */
 @Entity
-@Table(name="UserOrder")
+@Table(name = "UserOrder")
 public class UserOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,22 +19,35 @@ public class UserOrder {
     private Long id;
 
     @Column(name = "order_total_cost")
-    private int totalCost;
+    private double totalCost;
 
     @Column(name = "order_is_closed",
             columnDefinition = "boolean default false")
     private boolean isClosed;
 
-   /* @Column(name = "user_id", nullable = false)
-    private Long userId;
+    //One user can have many order, so here we have a one-to-many mapping.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "order_products")
+    //One order can have many products, so here we have a one-to-many mapping.
+    @OneToMany(mappedBy = "userOrder", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private Set<Product> products;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_pay_method")
-    private PayMethod payMethod;*/
+    private PayMethod payMethod;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_delivery_method")
+    private DeliveryMethod deliveryMethod;
 
     public UserOrder() {
+    }
+
+    public UserOrder(User user) {
+        this.user = user;
     }
 
     public UserOrder(int totalCost) {
@@ -45,11 +62,11 @@ public class UserOrder {
         this.id = id;
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(int totalCost) {
+    public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
     }
 
@@ -60,4 +77,44 @@ public class UserOrder {
     public void setClosed(boolean closed) {
         isClosed = closed;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
+    public PayMethod getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(PayMethod payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public DeliveryMethod getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    public void deleteProduct(Product prodToDelete) {
+        this.products.remove(prodToDelete);
+    }
+
 }

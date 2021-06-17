@@ -14,7 +14,7 @@ public interface PayStrategy {
     static String PAY_SUCCESS = "payRequest";
 
     boolean pay(PayRequest payRequest);
-    ModelAndView getModelAndView();
+    ModelAndView getModelAndView(ModelAndView model);
     String getViewName();
     boolean verify(PayRequest payRequest);
 }

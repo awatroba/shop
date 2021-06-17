@@ -2,12 +2,15 @@ package com.awatroba.shop.controllers;
 
 import com.awatroba.shop.exception.ShoppingCartNotFoundException;
 import com.awatroba.shop.helpers.BuyRequest;
+import com.awatroba.shop.helpers.PayRequest;
+import com.awatroba.shop.models.UserOrder;
 import com.awatroba.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import pay.PayStrategy;
 
 /**
  * @author Angelika
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CartController extends MyController {
     private ModelAndView model;
     private CartService cartService;
+
     @Autowired
     public CartController(CartService cartService) {
         this.cartService = cartService;
@@ -35,8 +39,8 @@ public class CartController extends MyController {
      */
     @GetMapping("/cart")
     public ModelAndView getCard(Authentication authentication) {
-        model.addObject(PAY_CLICKED,false);
-        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+        model.addObject(PAY_CLICKED, false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED, false);
 
         getBasicViewModel(authentication);
         return model;
@@ -52,8 +56,8 @@ public class CartController extends MyController {
     @PostMapping("/cart/{id}")
     public ModelAndView addProductToCard(
             @PathVariable("id") Long id, Authentication authentication) {
-        model.addObject(PAY_CLICKED,false);
-        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+        model.addObject(PAY_CLICKED, false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED, false);
 
         cartService.addProductToCart(authentication, id);
         getBasicViewModel(authentication);
@@ -69,10 +73,10 @@ public class CartController extends MyController {
      */
     @DeleteMapping("/cart/{id}")
     public ModelAndView deleteProductById(@PathVariable("id") Long id, Authentication authentication) {
-        model.addObject(PAY_CLICKED,false);
-        model.addObject(DELIVERY_AND_PAY_CLICKED,false);
+        model.addObject(PAY_CLICKED, false);
+        model.addObject(DELIVERY_AND_PAY_CLICKED, false);
 
-        cartService.deleteProduct(authentication, id);
+        cartService.deleteProduct(id,authentication);
         getBasicViewModel(authentication);
         return model;
     }
@@ -105,16 +109,54 @@ public class CartController extends MyController {
      *
      * @return ModelAndView with message and attribute
      */
+    //TODO: add exception handler
     @GetMapping("/order")
     public ModelAndView makeOrder(Authentication authentication) {
         if (cartService.getUsersShoppingCart(authentication).getProducts().size() > 0) {
             getBasicViewModel(authentication);
-            model.addObject(ORDER, cartService.makeOrder(authentication));
-            model.addObject(PAY_CLICKED,false);
-            model.addObject(DELIVERY_AND_PAY_CLICKED,true);
+
+            UserOrder order = cartService.makeOrder(authentication);
+            ((BuyRequest) model.getModel().get(BUY_REQUEST)).setOrder(order);
+
+            model.addObject(ORDER, order);
+            model.addObject(PAY_CLICKED, false);
+            model.addObject(DELIVERY_AND_PAY_CLICKED, true);
         } else {
             getBasicViewModel(authentication);
             model.addObject(MESSAGE_ERROR, SHOPPING_CART_EMPTY);
+        }
+        return model;
+    }
+
+    /**
+     * function for buy and pay
+     *
+     * @return ModelAndView with message and attribute
+     */
+    //TODO: add exception handler
+    @PostMapping("/buy")
+    public ModelAndView buy(@ModelAttribute BuyRequest request) {
+        model = cartService.getModelAndView(request, model);
+        cartService.addOrderDetails(request);
+        model.addObject(PAY_SUCCESS, false);
+        return model;
+    }
+
+    /**
+     * function for buy and pay
+     *
+     * @return ModelAndView with message and attribute
+     */
+    //TODO: add exception handler
+    @PostMapping("/pay")
+    public ModelAndView pay(@ModelAttribute PayRequest request,Authentication authentication) {
+        PayStrategy payStrategy = (PayStrategy) model.getModel().get(PayStrategy.PAY_STRATEGY);
+        if (payStrategy.verify(request) && payStrategy.pay(request)) {
+            model.addObject(MESSAGE_SUCCESS, MyController.PAY_SUCCESS_MESS);
+            model.addObject(PAY_SUCCESS, true);
+            cartService.closeAndSaveOrder(authentication);
+        } else {
+            model.addObject(MESSAGE_ERROR, MyController.PAY_ERROR);
         }
         return model;
     }

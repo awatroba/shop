@@ -2,6 +2,8 @@ package com.awatroba.shop.helpers;
 
 import com.awatroba.shop.enums.DeliveryMethod;
 import com.awatroba.shop.enums.PayMethod;
+import com.awatroba.shop.models.UserOrder;
+
 /**
  * @author Angelika
  * Model of buy request
@@ -10,6 +12,7 @@ public class BuyRequest {
     private PayMethod payMethod;
     private DeliveryMethod deliveryMethod;
     private Long userId;
+    private UserOrder order;
 
     public PayMethod getPayMethod() {
         return payMethod;
@@ -45,5 +48,13 @@ public class BuyRequest {
     public BuyRequest(PayMethod payMethod, DeliveryMethod deliveryMethod) {
         this.payMethod = payMethod;
         this.deliveryMethod = deliveryMethod;
+    }
+
+    public UserOrder getOrder() {
+        return order;
+    }
+
+    public void setOrder(UserOrder order) {
+        this.order = order;
     }
 }

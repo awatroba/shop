@@ -21,8 +21,8 @@ public class PayBlik implements PayStrategy {
     }
 
     @Override
-    public ModelAndView getModelAndView() {
-        ModelAndView model = new ModelAndView(viewName);
+    public ModelAndView getModelAndView(ModelAndView model) {
+        model.setViewName(viewName);
         model.addObject(MyController.MESSAGE_ERROR, "");
         model.addObject(MyController.MESSAGE_SUCCESS, "");
         model.addObject(PAY_REQUEST, new BlikRequest());
@@ -40,6 +40,4 @@ public class PayBlik implements PayStrategy {
     public boolean verify(PayRequest payRequest) {
         return true;
     }
-
-
 }
